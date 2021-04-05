@@ -1,1 +1,1 @@
-# subgraph-tester
+Subgraph Tester is a subgraph unit testing framework for The Graph Protocol, aimed at ensuring that the mapping logic is correct. It alloww developers to test their mapping logic against a known store state and against test fixtures (events).
