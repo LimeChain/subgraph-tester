@@ -6,9 +6,9 @@ const mockReturns: Map<string, any> = new Map();
 export const run = (fName: string) => {
   assert(
     mockReturns.get(fName) !== undefined,
-    "This function has not yet been mocked."
+    "This function has not yet been mocked.",
   );
-  return mockReturns.get(fName);
+  return mockReturns.get(fName)();
 };
 
 export const mock = (contract: any, fName: string, mockReturn: any) => {

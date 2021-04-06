@@ -12,13 +12,19 @@ describe("Contract functions", () => {
   });
 
   it("Can mock contract function and return mocked value", () => {
-    mock(testContract, "transfer", "myReturnValue");
+    mock(testContract, "transfer", () => {
+      return "myReturnValue";
+    });
 
     expect(run("transfer")).to.be.equal("myReturnValue");
   });
   it("Can override contract function mock and return updated mocked value", () => {
-    mock(testContract, "transfer", "myReturnValue");
-    mock(testContract, "transfer", "myUpdatedReturnValue");
+    mock(testContract, "transfer", () => {
+      return "myReturnValue";
+    });
+    mock(testContract, "transfer", () => {
+      return "myUpdatedReturnValue";
+    });
 
     expect(run("transfer")).to.be.equal("myUpdatedReturnValue");
   });
@@ -26,5 +32,15 @@ describe("Contract functions", () => {
     expect(() => {
       run("transfer");
     }).to.throw();
+  });
+  it("Mocked function can be more complex and affect wider scope", () => {
+    let num = 1;
+
+    mock(testContract, "transfer", () => {
+      num++;
+    });
+
+    run("transfer");
+    expect(num).to.be.equal(2);
   });
 });
