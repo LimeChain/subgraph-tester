@@ -11,9 +11,9 @@ import {
 export default class MockContract {
   public abi: IAbiItem[];
   public address: string;
-  private mockReturns: Map<string, any> = new Map();
+  private mockReturns: Map<string, () => {}> = new Map();
 
-  private functions: any[] = [];
+  private functions: any;
 
   constructor(abi: IAbiItem[], address: string) {
     const web3 = new Web3("https://cloudflare-eth.com");
@@ -22,6 +22,7 @@ export default class MockContract {
     this.abi = abi;
     this.address = address;
     this.functions = testContract.methods;
+    console.log(this.functions);
   }
 
   public mockFunction = ({
@@ -49,7 +50,7 @@ export default class MockContract {
       "This function has not been mocked yet.",
     );
 
-    return this.mockReturns.get(key)();
+    return this.mockReturns.get(key)!();
   }
 
   public clearMocks = () => {
