@@ -43,8 +43,6 @@ export default class MockContract {
     const raw = withArgs ? fName.concat(JSON.stringify(withArgs)) : fName;
     const key = sha256(raw).toString();
 
-    console.log(this.mockReturns);
-
     assert(
       this.mockReturns.get(key) !== undefined,
       "This function has not been mocked yet.",
