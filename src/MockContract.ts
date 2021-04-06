@@ -22,7 +22,6 @@ export default class MockContract {
     this.abi = abi;
     this.address = address;
     this.functions = testContract.methods;
-    console.log(this.functions);
   }
 
   public mockFunction = ({
