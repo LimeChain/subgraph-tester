@@ -1,4 +1,5 @@
 import { assert } from "chai";
+import sha256 from "crypto-js/sha256";
 import sinon from "sinon";
 
 export interface IMockFunctionArgs {
@@ -24,20 +25,25 @@ export const mock = ({
   mockReturn,
   withArgs,
 }: IMockFunctionArgs) => {
+  const raw = withArgs ? fName.concat(JSON.stringify(withArgs)) : fName;
+  const key = sha256(raw).toString();
+
   assert(fName in contract.methods, "Function does not exist in contract.");
 
   const mockRes = sinon.mock().returns(mockReturn)();
-  mockReturns.set(withArgs ? fName.concat(withArgs.join()) : fName, mockRes);
+  mockReturns.set(key, mockRes);
 };
 
 export const run = ({ fName, withArgs }: IRunFunctionArgs) => {
+  const raw = withArgs ? fName.concat(JSON.stringify(withArgs)) : fName;
+  const key = sha256(raw).toString();
+
   assert(
-    mockReturns.get(withArgs ? fName.concat(withArgs.join()) : fName) !==
-      undefined,
-    "This function has not yet been mocked.",
+    mockReturns.get(key) !== undefined,
+    "This function has not been mocked yet.",
   );
 
-  return mockReturns.get(withArgs ? fName.concat(withArgs.join()) : fName)();
+  return mockReturns.get(key)();
 };
 
 export const clearMocks = () => {
