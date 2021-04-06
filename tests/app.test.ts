@@ -1,6 +1,12 @@
 import { expect } from "chai";
 import Web3 from "web3";
-import { clearMocks, IMockFunctionArgs, IRunFunctionArgs, mock, run } from "../src/app";
+import {
+  clearMocks,
+  IMockFunctionArgs,
+  IRunFunctionArgs,
+  mock,
+  run,
+} from "../src/app";
 import { address, ERC20TransferABI } from "./mocks/sampleContractABI";
 
 const web3 = new Web3("https://cloudflare-eth.com");
@@ -68,9 +74,11 @@ describe("Contract functions", () => {
     mock({
       ...baseMockFunctionArgs,
       mockReturn: mockReturnWithArgs,
-      withArgs: "ping",
+      withArgs: ["ping"],
     });
 
-    expect(run(baseRunFunctionArgs)).to.be.equal("pong");
+    expect(run({ ...baseRunFunctionArgs, withArgs: ["ping"] })).to.be.equal(
+      "pong",
+    );
   });
 });
