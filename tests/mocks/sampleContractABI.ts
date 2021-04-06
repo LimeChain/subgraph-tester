@@ -1,4 +1,3 @@
-// TODO: get these from index.d.ts in web3
 interface IAbiItem {
     anonymous?: boolean;
     constant?: boolean;

@@ -1,24 +1,16 @@
 import { expect } from "chai";
-import Web3 from "web3";
-import {
-  clearMocks,
-  IMockFunctionArgs,
-  IRunFunctionArgs,
-  mock,
-  run,
-} from "../src/app";
+import MockContract from "../src/MockContract";
+import { IMockFunctionArgs, IRunFunctionArgs } from "../src/models/Contract";
 import { address, ERC20TransferABI } from "./mocks/sampleContractABI";
 
-const web3 = new Web3("https://cloudflare-eth.com");
-const testContract = new web3.eth.Contract(ERC20TransferABI, address);
-
 describe("Contract functions", () => {
+  const mockContract = new MockContract(ERC20TransferABI, address);
+
   const testReturnValue = () => {
     return "myReturnValue";
   };
 
   const baseMockFunctionArgs: IMockFunctionArgs = {
-    contract: testContract,
     fName: "transfer",
     mockReturn: testReturnValue,
   };
@@ -28,28 +20,28 @@ describe("Contract functions", () => {
   };
 
   afterEach(() => {
-    clearMocks();
+    mockContract.clearMocks();
   });
 
   it("Can mock contract function and return mocked value", () => {
-    mock(baseMockFunctionArgs);
-    expect(run(baseRunFunctionArgs)).to.be.equal("myReturnValue");
+    mockContract.mockFunction(baseMockFunctionArgs);
+    expect(mockContract.runFunction(baseRunFunctionArgs)).to.be.equal("myReturnValue");
   });
 
   it("Can override contract function mock and return updated mocked value", () => {
-    mock(baseMockFunctionArgs);
+    mockContract.mockFunction(baseMockFunctionArgs);
 
     const updatedReturnValue = () => {
       return "myUpdatedReturnValue";
     };
-    mock({ ...baseMockFunctionArgs, mockReturn: updatedReturnValue });
+    mockContract.mockFunction({ ...baseMockFunctionArgs, mockReturn: updatedReturnValue });
 
-    expect(run(baseRunFunctionArgs)).to.be.equal("myUpdatedReturnValue");
+    expect(mockContract.runFunction(baseRunFunctionArgs)).to.be.equal("myUpdatedReturnValue");
   });
 
   it("Fails when attempting to run function that hasn't been mocked yet", () => {
     expect(() => {
-      run(baseRunFunctionArgs);
+      mockContract.runFunction(baseRunFunctionArgs);
     }).to.throw();
   });
 
@@ -60,9 +52,9 @@ describe("Contract functions", () => {
       num++;
       return num;
     };
-    mock({ ...baseMockFunctionArgs, mockReturn: widerScopeFunction });
+    mockContract.mockFunction({ ...baseMockFunctionArgs, mockReturn: widerScopeFunction });
 
-    run(baseRunFunctionArgs);
+    mockContract.runFunction(baseRunFunctionArgs);
     expect(num).to.be.equal(2);
   });
 
@@ -71,13 +63,13 @@ describe("Contract functions", () => {
       return "pong";
     };
 
-    mock({
+    mockContract.mockFunction({
       ...baseMockFunctionArgs,
       mockReturn: mockReturnWithArgs,
       withArgs: ["ping"],
     });
 
-    expect(run({ ...baseRunFunctionArgs, withArgs: ["ping"] })).to.be.equal(
+    expect(mockContract.runFunction({ ...baseRunFunctionArgs, withArgs: ["ping"] })).to.be.equal(
       "pong",
     );
   });
@@ -87,14 +79,14 @@ describe("Contract functions", () => {
       return "ping pong ping";
     };
 
-    mock({
+    mockContract.mockFunction({
       ...baseMockFunctionArgs,
       mockReturn: mockReturnWithArgs,
       withArgs: ["ping", 1, 5],
     });
 
     expect(
-      run({ ...baseRunFunctionArgs, withArgs: ["ping", 1, 5] }),
+      mockContract.runFunction({ ...baseRunFunctionArgs, withArgs: ["ping", 1, 5] }),
     ).to.be.equal("ping pong ping");
   });
 });

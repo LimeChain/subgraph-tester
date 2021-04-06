@@ -1,0 +1,55 @@
+import { assert } from "chai";
+import sha256 from "crypto-js/sha256";
+import sinon from "sinon";
+import Web3 from "web3";
+import { IAbiItem, IMockFunctionArgs, IRunFunctionArgs} from "./models/Contract";
+
+export default class MockContract {
+  public abi: IAbiItem[];
+  public address: string;
+  private mockReturns: Map<string, any> = new Map();
+
+  // TODO: get methods from web3
+  private functions: any[] = [];
+
+  constructor(abi: IAbiItem[], address: string) {
+    const web3 = new Web3("https://cloudflare-eth.com");
+    const testContract = new web3.eth.Contract(abi, address);
+
+    this.abi = abi;
+    this.address = address;
+    this.functions = testContract.methods;
+  }
+
+  public mockFunction = ({
+    fName,
+    mockReturn,
+    withArgs,
+  }: IMockFunctionArgs): void  => {
+    const raw = withArgs ? fName.concat(JSON.stringify(withArgs)) : fName;
+    const key = sha256(raw).toString();
+
+    assert(fName in this.functions, "Function does not exist in contract.");
+
+    const mockRes = sinon.mock().returns(mockReturn)();
+    this.mockReturns.set(key, mockRes);
+  }
+
+  public runFunction = ({ fName, withArgs }: IRunFunctionArgs) => {
+    const raw = withArgs ? fName.concat(JSON.stringify(withArgs)) : fName;
+    const key = sha256(raw).toString();
+
+    console.log(this.mockReturns);
+
+    assert(
+      this.mockReturns.get(key) !== undefined,
+      "This function has not been mocked yet.",
+    );
+
+    return this.mockReturns.get(key)();
+  }
+
+  public clearMocks = () => {
+    this.mockReturns.clear();
+  }
+}
