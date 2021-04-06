@@ -18,6 +18,7 @@ describe("Contract functions", () => {
 
     expect(run("transfer")).to.be.equal("myReturnValue");
   });
+
   it("Can override contract function mock and return updated mocked value", () => {
     mock(testContract, "transfer", () => {
       return "myReturnValue";
@@ -28,14 +29,15 @@ describe("Contract functions", () => {
 
     expect(run("transfer")).to.be.equal("myUpdatedReturnValue");
   });
+
   it("Fails when attempting to run function that hasn't been mocked yet", () => {
     expect(() => {
       run("transfer");
     }).to.throw();
   });
+
   it("Mocked function can be more complex and affect wider scope", () => {
     let num = 1;
-
     mock(testContract, "transfer", () => {
       num++;
     });
