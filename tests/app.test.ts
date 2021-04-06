@@ -90,11 +90,11 @@ describe("Contract functions", () => {
     mock({
       ...baseMockFunctionArgs,
       mockReturn: mockReturnWithArgs,
-      withArgs: ["ping", 1 , 5],
+      withArgs: ["ping", 1, 5],
     });
 
-    expect(run({ ...baseRunFunctionArgs, withArgs: ["ping", 1, 5] })).to.be.equal(
-      "ping pong ping",
-    );
+    expect(
+      run({ ...baseRunFunctionArgs, withArgs: ["ping", 1, 5] }),
+    ).to.be.equal("ping pong ping");
   });
 });

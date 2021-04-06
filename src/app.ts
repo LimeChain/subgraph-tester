@@ -7,13 +7,11 @@ export interface IMockFunctionArgs {
   contract: any;
   fName: string;
   mockReturn: () => {};
-  // TODO: convert this to map of args
   withArgs?: any[];
 }
 
 export interface IRunFunctionArgs {
   fName: string;
-  // TODO: convert this to map of args
   withArgs?: any[];
 }
 
