@@ -25,7 +25,9 @@ describe("Contract functions", () => {
 
   it("Can mock contract function and return mocked value", () => {
     mockContract.mockFunction(baseMockFunctionArgs);
-    expect(mockContract.runFunction(baseRunFunctionArgs)).to.be.equal("myReturnValue");
+    expect(mockContract.runFunction(baseRunFunctionArgs)).to.be.equal(
+      "myReturnValue",
+    );
   });
 
   it("Can override contract function mock and return updated mocked value", () => {
@@ -34,9 +36,14 @@ describe("Contract functions", () => {
     const updatedReturnValue = () => {
       return "myUpdatedReturnValue";
     };
-    mockContract.mockFunction({ ...baseMockFunctionArgs, mockReturn: updatedReturnValue });
+    mockContract.mockFunction({
+      ...baseMockFunctionArgs,
+      mockReturn: updatedReturnValue,
+    });
 
-    expect(mockContract.runFunction(baseRunFunctionArgs)).to.be.equal("myUpdatedReturnValue");
+    expect(mockContract.runFunction(baseRunFunctionArgs)).to.be.equal(
+      "myUpdatedReturnValue",
+    );
   });
 
   it("Fails when attempting to run function that hasn't been mocked yet", () => {
@@ -52,7 +59,10 @@ describe("Contract functions", () => {
       num++;
       return num;
     };
-    mockContract.mockFunction({ ...baseMockFunctionArgs, mockReturn: widerScopeFunction });
+    mockContract.mockFunction({
+      ...baseMockFunctionArgs,
+      mockReturn: widerScopeFunction,
+    });
 
     mockContract.runFunction(baseRunFunctionArgs);
     expect(num).to.be.equal(2);
@@ -69,9 +79,9 @@ describe("Contract functions", () => {
       withArgs: ["ping"],
     });
 
-    expect(mockContract.runFunction({ ...baseRunFunctionArgs, withArgs: ["ping"] })).to.be.equal(
-      "pong",
-    );
+    expect(
+      mockContract.runFunction({ ...baseRunFunctionArgs, withArgs: ["ping"] }),
+    ).to.be.equal("pong");
   });
 
   it("Can pass multiple optional arguments to mocked function", () => {
@@ -86,7 +96,10 @@ describe("Contract functions", () => {
     });
 
     expect(
-      mockContract.runFunction({ ...baseRunFunctionArgs, withArgs: ["ping", 1, 5] }),
+      mockContract.runFunction({
+        ...baseRunFunctionArgs,
+        withArgs: ["ping", 1, 5],
+      }),
     ).to.be.equal("ping pong ping");
   });
 });

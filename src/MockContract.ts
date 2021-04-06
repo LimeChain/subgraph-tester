@@ -2,14 +2,17 @@ import { assert } from "chai";
 import sha256 from "crypto-js/sha256";
 import sinon from "sinon";
 import Web3 from "web3";
-import { IAbiItem, IMockFunctionArgs, IRunFunctionArgs} from "./models/Contract";
+import {
+  IAbiItem,
+  IMockFunctionArgs,
+  IRunFunctionArgs,
+} from "./models/Contract";
 
 export default class MockContract {
   public abi: IAbiItem[];
   public address: string;
   private mockReturns: Map<string, any> = new Map();
 
-  // TODO: get methods from web3
   private functions: any[] = [];
 
   constructor(abi: IAbiItem[], address: string) {
@@ -25,7 +28,7 @@ export default class MockContract {
     fName,
     mockReturn,
     withArgs,
-  }: IMockFunctionArgs): void  => {
+  }: IMockFunctionArgs): void => {
     const raw = withArgs ? fName.concat(JSON.stringify(withArgs)) : fName;
     const key = sha256(raw).toString();
 
