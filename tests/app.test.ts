@@ -81,4 +81,20 @@ describe("Contract functions", () => {
       "pong",
     );
   });
+
+  it("Can pass multiple optional arguments to mocked function", () => {
+    const mockReturnWithArgs = () => {
+      return "ping pong ping";
+    };
+
+    mock({
+      ...baseMockFunctionArgs,
+      mockReturn: mockReturnWithArgs,
+      withArgs: ["ping", 1 , 5],
+    });
+
+    expect(run({ ...baseRunFunctionArgs, withArgs: ["ping", 1, 5] })).to.be.equal(
+      "ping pong ping",
+    );
+  });
 });
