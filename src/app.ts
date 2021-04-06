@@ -1,8 +1,6 @@
 import { assert } from "chai";
 import sinon from "sinon";
 
-// trigger rebuild
-
 const mockReturns: Map<string, any> = new Map();
 
 export const run = (fName: string) => {
