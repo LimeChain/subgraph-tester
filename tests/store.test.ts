@@ -35,7 +35,7 @@ describe("Store", () => {
     const endStateMap = new Map(JSON.parse(store.readState()));
     expect(endStateMap).to.have.lengthOf(3);
     expect(JSON.stringify(Array.from(endStateMap.entries()))).to.equal(
-      JSON.stringify(fantasyEntities)
+      JSON.stringify(fantasyEntities),
     );
   });
 
@@ -43,7 +43,7 @@ describe("Store", () => {
     store.hydrateWithJson(JSON.stringify(fantasyEntities));
 
     const deepEqual = store.assertStateSnapshotEq(
-      JSON.stringify(fantasyEntities)
+      JSON.stringify(fantasyEntities),
     );
     // tslint:disable-next-line: no-unused-expression
     expect(deepEqual).to.be.true;
@@ -53,7 +53,7 @@ describe("Store", () => {
     store.hydrateWithJson(JSON.stringify(fantasyEntities));
 
     const deepEqual = store.assertStateSnapshotEq(
-      JSON.stringify(sciFiEntities)
+      JSON.stringify(sciFiEntities),
     );
     // tslint:disable-next-line: no-unused-expression
     expect(deepEqual).to.be.false;
@@ -65,13 +65,13 @@ describe("Store", () => {
     expect(() => {
       store.hydrateWithJson(JSON.stringify(sciFiEntities));
     }).to.throw(
-      `State is not empty. Please use state.clear() to clear the state before hydrating.`
+      `State is not empty. Please use state.clear() to clear the state before hydrating.`,
     );
 
     expect(() => {
       store.hydrateWithEntities(entities);
     }).to.throw(
-      `State is not empty. Please use state.clear() to clear the state before hydrating.`
+      `State is not empty. Please use state.clear() to clear the state before hydrating.`,
     );
   });
 
@@ -85,7 +85,7 @@ describe("Store", () => {
     expect(() => {
       store.assertStateSnapshotEq(JSON.stringify(fantasyEntities));
     }).to.throw(
-      `Cannot check for equality when the state is empty. You need to first hydrate the state.`
+      `Cannot check for equality when the state is empty. You need to first hydrate the state.`,
     );
   });
 
