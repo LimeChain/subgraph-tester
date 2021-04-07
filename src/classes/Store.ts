@@ -1,3 +1,4 @@
+import equal from "fast-deep-equal/es6";
 import Entity from "./Entity";
 
 export default class Store {
@@ -13,5 +14,10 @@ export default class Store {
 
     public readState = () => {
         return JSON.stringify(Array.from(this.state.entries()));
+    }
+
+    public assertEq = (snapshot: string) => {
+        const snapshotMap: Map<string, Entity> = new Map(JSON.parse(snapshot));
+        return equal(snapshotMap, this.state);
     }
 }
