@@ -9,13 +9,14 @@ describe("Store", () => {
   const coinEntity = new Entity("34", "Coin", "Old coin made of silver");
   const rabbitEntity = new Entity("66", "Animal", "White rabbit");
 
-  entities.set("dragonEntityKey", dragonEntity);
-  entities.set("coinEntityKey", coinEntity);
-
   let store: Store;
 
   beforeEach(() => {
     store = new Store();
+
+    entities.set("dragonEntityKey", dragonEntity);
+    entities.set("coinEntityKey", coinEntity);
+    entities.delete("rabbitEntityKey");
   });
 
   it("Should hydrate the state with a list of entities", () => {
@@ -160,5 +161,56 @@ describe("Store", () => {
 
     store.clear();
     expect(store.size()).to.be.equal(0);
+  });
+
+  it("Can add new entity", () => {
+    store.hydrateWithEntities(entities);
+    store.addEntity("rabbitEntityKey", rabbitEntity);
+
+    const newEntityExists = store.entityExists(rabbitEntity);
+    // tslint:disable-next-line: no-unused-expression
+    expect(newEntityExists).to.be.true;
+
+    const entityKeyExists = store.entityKeyExists("rabbitEntityKey");
+    // tslint:disable-next-line: no-unused-expression
+    expect(entityKeyExists).to.be.true;
+  });
+
+  it("Fails if an empty string is provided when adding a new entity", () => {
+    store.hydrateWithEntities(entities);
+
+    expect(() => {
+      store.addEntity("  ", rabbitEntity);
+    }).to.throw(`Entity key cannot be an empty string.`);
+  });
+
+  it("Fails if an empty string is provided when deleting an entity", () => {
+    store.hydrateWithEntities(entities);
+
+    expect(() => {
+      store.deleteEntity("  ");
+    }).to.throw(`Entity key cannot be an empty string.`);
+  });
+
+  it("Fails if a key that doesn't exist in the store is provided when attempting to delete an entity", () => {
+    store.hydrateWithEntities(entities);
+
+    expect(() => {
+      store.deleteEntity("FishEntityKey");
+    }).to.throw(`Entity key FishEntityKey not found in the state.`);
+  });
+
+  it("Can successfully delete an entity", () => {
+    store.hydrateWithEntities(entities);
+    console.log(store.readState());
+    store.deleteEntity("dragonEntityKey");
+
+    const dragonEntityKeyExists = store.entityKeyExists("dragonEntityKey");
+    const dragonEntityExists = store.entityExists(dragonEntity);
+    // tslint:disable-next-line: no-unused-expression
+    expect(dragonEntityKeyExists).to.be.false;
+    // tslint:disable-next-line: no-unused-expression
+    expect(dragonEntityExists).to.be.false;
+    expect(store.size()).to.be.equal(1);
   });
 });
