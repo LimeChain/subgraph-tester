@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import Entity from "../src/classes/Entity";
 import Store from "../src/classes/Store";
+import mockEntities from "./mocks/mockEntities";
 
 describe("Store", () => {
   it("Should hydrate the state with a list of entities", () => {
@@ -20,5 +21,16 @@ describe("Store", () => {
 
     expect(endStateMap).to.have.lengthOf(2);
     expect(entitiesJson).to.be.equal(endStateJson);
+  });
+
+  it("Should hydrate the state with a store JSON", () => {
+    const store = new Store();
+    store.hydrateWithJson(JSON.stringify(mockEntities));
+
+    const endStateMap = new Map(JSON.parse(store.readState()));
+    expect(endStateMap).to.have.lengthOf(3);
+    expect(JSON.stringify(Array.from(endStateMap.entries()))).to.equal(
+      JSON.stringify(mockEntities),
+    );
   });
 });

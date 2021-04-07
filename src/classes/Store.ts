@@ -7,9 +7,11 @@ export default class Store {
         this.state = entities;
     }
 
+    public hydrateWithJson = (stringifiedJson: string) => {
+        this.state = new Map(JSON.parse(stringifiedJson));
+    }
+
     public readState = () => {
         return JSON.stringify(Array.from(this.state.entries()));
     }
-
-    // TODO: hydrate with JSON
 }
