@@ -67,6 +67,6 @@ export default class Store {
   }
 
   public size = (): number => {
-      return this.state.size;
+    return this.state.size;
   }
 }

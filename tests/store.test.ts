@@ -35,14 +35,16 @@ describe("Store", () => {
     const endStateMap = new Map(JSON.parse(store.readState()));
     expect(endStateMap).to.have.lengthOf(3);
     expect(JSON.stringify(Array.from(endStateMap.entries()))).to.equal(
-      JSON.stringify(fantasyEntities),
+      JSON.stringify(fantasyEntities)
     );
   });
 
   it("Should deeply compare the state to a given JSON snapshot and return true when they are equal", () => {
     store.hydrateWithJson(JSON.stringify(fantasyEntities));
 
-    const deepEqual = store.assertStateSnapshotEq(JSON.stringify(fantasyEntities));
+    const deepEqual = store.assertStateSnapshotEq(
+      JSON.stringify(fantasyEntities)
+    );
     // tslint:disable-next-line: no-unused-expression
     expect(deepEqual).to.be.true;
   });
@@ -50,7 +52,9 @@ describe("Store", () => {
   it("Should deeply compare the state to a given JSON snapshot and return false when they are not equal", () => {
     store.hydrateWithJson(JSON.stringify(fantasyEntities));
 
-    const deepEqual = store.assertStateSnapshotEq(JSON.stringify(sciFiEntities));
+    const deepEqual = store.assertStateSnapshotEq(
+      JSON.stringify(sciFiEntities)
+    );
     // tslint:disable-next-line: no-unused-expression
     expect(deepEqual).to.be.false;
   });
@@ -61,29 +65,27 @@ describe("Store", () => {
     expect(() => {
       store.hydrateWithJson(JSON.stringify(sciFiEntities));
     }).to.throw(
-      `State is not empty. Please use state.clear() to clear the state before hydrating.`,
+      `State is not empty. Please use state.clear() to clear the state before hydrating.`
     );
 
     expect(() => {
       store.hydrateWithEntities(entities);
     }).to.throw(
-      `State is not empty. Please use state.clear() to clear the state before hydrating.`,
+      `State is not empty. Please use state.clear() to clear the state before hydrating.`
     );
   });
 
   it("Fails when attempting ot hydrate state with an empty map", () => {
     expect(() => {
       store.hydrateWithJson("   ");
-    }).to.throw(
-      `JSON cannot be an empty string.`,
-    );
+    }).to.throw(`JSON cannot be an empty string.`);
   });
 
   it("Fails when asserting equality of snapshot when state is empty", () => {
     expect(() => {
       store.assertStateSnapshotEq(JSON.stringify(fantasyEntities));
     }).to.throw(
-      `Cannot check for equality when the state is empty. You need to first hydrate the state.`,
+      `Cannot check for equality when the state is empty. You need to first hydrate the state.`
     );
   });
 
@@ -100,9 +102,7 @@ describe("Store", () => {
 
     expect(() => {
       store.assertEntityEq("  ", dragonEntity);
-    }).to.throw(
-      `Entity key cannot be an empty string.`,
-    );
+    }).to.throw(`Entity key cannot be an empty string.`);
   });
 
   // tslint:disable-next-line: max-line-length
@@ -111,9 +111,7 @@ describe("Store", () => {
 
     expect(() => {
       store.assertEntityEq("rabbitEntityKey", dragonEntity);
-    }).to.throw(
-      `Entity key rabbitEntityKey not found in the state.`,
-    );
+    }).to.throw(`Entity key rabbitEntityKey not found in the state.`);
   });
 
   it("Checks properly for entity equality", () => {
@@ -153,9 +151,7 @@ describe("Store", () => {
 
     expect(() => {
       store.entityKeyExists("  ");
-    }).to.throw(
-      `Entity key cannot be an empty string.`,
-    );
+    }).to.throw(`Entity key cannot be an empty string.`);
   });
 
   it("Clears state successfully", () => {
