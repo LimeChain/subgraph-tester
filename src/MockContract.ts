@@ -28,13 +28,25 @@ export default class MockContract {
     fName,
     mockReturn,
     withArgs,
+    reverts,
+    revertsMsg,
   }: IMockFunctionArgs): void => {
     const raw = withArgs ? fName.concat(JSON.stringify(withArgs)) : fName;
     const key = sha256(raw).toString();
 
     assert(fName in this.functions, "Function does not exist in contract.");
 
-    const mockRes = sinon.mock().returns(mockReturn)();
+    const revertsResponse = () => {
+      throw Error(
+        `Function "${fName}" reverted. ${
+          revertsMsg ? "Reason: " + revertsMsg : "No reason specified."
+        }`,
+      );
+    };
+
+    const mockRes = reverts
+      ? revertsResponse
+      : sinon.mock().returns(mockReturn)();
     this.mockReturns.set(key, mockRes);
   }
 

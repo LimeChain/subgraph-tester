@@ -32,6 +32,8 @@ export interface IMockFunctionArgs {
   fName: string;
   mockReturn: () => {};
   withArgs?: any[];
+  reverts?: boolean;
+  revertsMsg?: string;
 }
 
 export interface IRunFunctionArgs {

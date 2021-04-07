@@ -23,6 +23,15 @@ describe("Contract functions", () => {
     mockContract.clearMocks();
   });
 
+  it("Fails when trying to mock function that doesn't exist in the contract", () => {
+    expect(() => {
+      mockContract.mockFunction({
+        ...baseMockFunctionArgs,
+        fName: "nonExistent",
+      });
+    }).to.throw("Function does not exist in contract.");
+  });
+
   it("Can mock contract function and return mocked value", () => {
     mockContract.mockFunction(baseMockFunctionArgs);
     expect(mockContract.runFunction(baseRunFunctionArgs)).to.be.equal(
@@ -49,7 +58,7 @@ describe("Contract functions", () => {
   it("Fails when attempting to run function that hasn't been mocked yet", () => {
     expect(() => {
       mockContract.runFunction(baseRunFunctionArgs);
-    }).to.throw();
+    }).to.throw("This function has not been mocked yet.");
   });
 
   it("Mocked function can be more complex and affect wider scope", () => {
@@ -101,5 +110,27 @@ describe("Contract functions", () => {
         withArgs: ["ping", 1, 5],
       }),
     ).to.be.equal("ping pong ping");
+  });
+
+  it("Can mock function revert with a message", () => {
+    mockContract.mockFunction({
+      ...baseMockFunctionArgs,
+      reverts: true,
+      revertsMsg: "Not enough balance",
+    });
+    expect(() => {
+      mockContract.runFunction(baseRunFunctionArgs);
+    }).to.throw(
+      `Function "${baseRunFunctionArgs.fName}" reverted. Reason: Not enough balance`,
+    );
+  });
+
+  it("Can mock function revert without message", () => {
+    mockContract.mockFunction({ ...baseMockFunctionArgs, reverts: true });
+    expect(() => {
+      mockContract.runFunction(baseRunFunctionArgs);
+    }).to.throw(
+      `Function "${baseRunFunctionArgs.fName}" reverted. No reason specified.`,
+    );
   });
 });
