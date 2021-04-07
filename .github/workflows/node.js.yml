@@ -26,4 +26,5 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: rm -rf node_modules && yarn install
+    - run: yarn tslint --project "."
     - run: yarn test
