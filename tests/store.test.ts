@@ -7,12 +7,18 @@ describe("Store", () => {
   const entities: Map<string, Entity> = new Map();
   const dragonEntity = new Entity("1", "Dragon", "The dragon is green");
   const coinEntity = new Entity("34", "Coin", "Old coin made of silver");
+  const rabbitEntity = new Entity("66", "Animal", "White rabbit");
 
   entities.set("dragonEntityKey", dragonEntity);
   entities.set("coinEntityKey", coinEntity);
 
+  let store: Store;
+
+  beforeEach(() => {
+    store = new Store();
+  });
+
   it("Should hydrate the state with a list of entities", () => {
-    const store = new Store();
     store.hydrateWithEntities(entities);
 
     const entitiesJson = JSON.stringify(Array.from(entities.entries()));
@@ -24,7 +30,6 @@ describe("Store", () => {
   });
 
   it("Should hydrate the state with a store JSON", () => {
-    const store = new Store();
     store.hydrateWithJson(JSON.stringify(fantasyEntities));
 
     const endStateMap = new Map(JSON.parse(store.readState()));
@@ -35,7 +40,6 @@ describe("Store", () => {
   });
 
   it("Should deeply compare the state to a given JSON snapshot and return true when they are equal", () => {
-    const store = new Store();
     store.hydrateWithJson(JSON.stringify(fantasyEntities));
 
     const deepEqual = store.assertStateSnapshotEq(JSON.stringify(fantasyEntities));
@@ -44,7 +48,6 @@ describe("Store", () => {
   });
 
   it("Should deeply compare the state to a given JSON snapshot and return false when they are not equal", () => {
-    const store = new Store();
     store.hydrateWithJson(JSON.stringify(fantasyEntities));
 
     const deepEqual = store.assertStateSnapshotEq(JSON.stringify(sciFiEntities));
@@ -53,7 +56,6 @@ describe("Store", () => {
   });
 
   it("Fails when attempting to hydrate a non-empty state", () => {
-    const store = new Store();
     store.hydrateWithJson(JSON.stringify(fantasyEntities));
 
     expect(() => {
@@ -70,8 +72,6 @@ describe("Store", () => {
   });
 
   it("Fails when attempting ot hydrate state with an empty map", () => {
-    const store = new Store();
-
     expect(() => {
       store.hydrateWithJson("   ");
     }).to.throw(
@@ -80,8 +80,6 @@ describe("Store", () => {
   });
 
   it("Fails when asserting equality of snapshot when state is empty", () => {
-    const store = new Store();
-
     expect(() => {
       store.assertStateSnapshotEq(JSON.stringify(fantasyEntities));
     }).to.throw(
@@ -90,7 +88,6 @@ describe("Store", () => {
   });
 
   it("Fails when asserting equality of snapshot with an empty string as snapshot", () => {
-    const store = new Store();
     store.hydrateWithJson(JSON.stringify(fantasyEntities));
 
     expect(() => {
@@ -99,7 +96,6 @@ describe("Store", () => {
   });
 
   it("Fails when providing an empty entity key when asserting equality of Entity objects", () => {
-    const store = new Store();
     store.hydrateWithJson(JSON.stringify(fantasyEntities));
 
     expect(() => {
@@ -111,7 +107,6 @@ describe("Store", () => {
 
   // tslint:disable-next-line: max-line-length
   it("Fails when attempting to assert equality of entities when the given entity key does not exist in the state", () => {
-    const store = new Store();
     store.hydrateWithJson(JSON.stringify(fantasyEntities));
 
     expect(() => {
@@ -122,8 +117,8 @@ describe("Store", () => {
   });
 
   it("Checks properly for entity equality", () => {
-    const store = new Store();
     store.hydrateWithEntities(entities);
+
     let equal = store.assertEntityEq("dragonEntityKey", dragonEntity);
     // tslint:disable-next-line: no-unused-expression
     expect(equal).to.be.true;
@@ -131,5 +126,43 @@ describe("Store", () => {
     equal = store.assertEntityEq("dragonEntityKey", coinEntity);
     // tslint:disable-next-line: no-unused-expression
     expect(equal).to.be.false;
+  });
+
+  it("Correctly checks whether entity object exists in the state", () => {
+    store.hydrateWithEntities(entities);
+
+    let exists = store.entityExists(dragonEntity);
+    // tslint:disable-next-line: no-unused-expression
+    expect(exists).to.be.true;
+
+    exists = store.entityExists(rabbitEntity);
+    // tslint:disable-next-line: no-unused-expression
+    expect(exists).to.be.false;
+  });
+
+  it("Correctly checks whether entity key exists in the state", () => {
+    store.hydrateWithEntities(entities);
+
+    const exists = store.entityKeyExists("dragonEntityKey");
+    // tslint:disable-next-line: no-unused-expression
+    expect(exists).to.be.true;
+  });
+
+  it("Fails when checking whether entity key exists in state when the given key is an empty string", () => {
+    store.hydrateWithEntities(entities);
+
+    expect(() => {
+      store.entityKeyExists("  ");
+    }).to.throw(
+      `Entity key cannot be an empty string.`,
+    );
+  });
+
+  it("Clears state successfully", () => {
+    store.hydrateWithEntities(entities);
+    expect(store.size()).to.be.equal(2);
+
+    store.clear();
+    expect(store.size()).to.be.equal(0);
   });
 });
