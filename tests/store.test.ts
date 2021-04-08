@@ -42,20 +42,17 @@ describe("Store", () => {
 
   it("Should deeply compare the state to a given JSON snapshot and return true when they are equal", () => {
     store.hydrateWithJson(JSON.stringify(fantasyEntities));
-
-    const deepEqual = store.assertStateSnapshotEq(
-      JSON.stringify(fantasyEntities),
-    );
-    expect(deepEqual).equals(true);
+    expect(() => {
+      store.assertStateSnapshotEq(JSON.stringify(fantasyEntities));
+    }).not.throws();
   });
 
   it("Should deeply compare the state to a given JSON snapshot and return false when they are not equal", () => {
     store.hydrateWithJson(JSON.stringify(fantasyEntities));
 
-    const deepEqual = store.assertStateSnapshotEq(
-      JSON.stringify(sciFiEntities),
-    );
-    expect(deepEqual).equals(false);
+    expect(() => {
+      store.assertStateSnapshotEq(JSON.stringify(sciFiEntities));
+    }).throws(`Provided snapshot map is not equal to the store.`);
   });
 
   it("Fails when attempting to hydrate a non-empty state", () => {
@@ -115,11 +112,14 @@ describe("Store", () => {
   it("Checks properly for entity equality", () => {
     store.hydrateWithEntities(entities);
 
-    let equal = store.assertEntityEq("dragonEntityKey", dragonEntity);
-    expect(equal).equals(true);
-
-    equal = store.assertEntityEq("dragonEntityKey", coinEntity);
-    expect(equal).equals(false);
+    expect(() => {
+      store.assertEntityEq("dragonEntityKey", dragonEntity);
+    }).not.throws();
+    expect(() => {
+      store.assertEntityEq("dragonEntityKey", coinEntity);
+    }).throws(
+      `Provided entity is not equal to corresponding entity with given entity key in the state.`,
+    );
   });
 
   it("Correctly checks whether entity object exists in the state", () => {

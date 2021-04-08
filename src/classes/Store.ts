@@ -48,7 +48,10 @@ export default class Store {
     );
 
     const snapshotMap: Map<string, Entity> = new Map(JSON.parse(snapshot));
-    return equal(snapshotMap, this.state);
+    assert(
+      equal(snapshotMap, this.state),
+      "Provided snapshot map is not equal to the store.",
+    );
   }
 
   public assertEntityEq = (entityKey: string, entity: Entity) => {
@@ -58,7 +61,10 @@ export default class Store {
       `Entity key ${entityKey} not found in the state.`,
     );
 
-    return equal(this.state.get(entityKey), entity);
+    assert(
+      equal(this.state.get(entityKey), entity),
+      "Provided entity is not equal to corresponding entity with given entity key in the state.",
+    );
   }
 
   public entityExists = (entity: Entity): boolean => {
