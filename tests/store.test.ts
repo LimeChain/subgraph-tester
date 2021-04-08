@@ -202,7 +202,6 @@ describe("Store", () => {
 
   it("Can successfully delete an entity", () => {
     store.hydrateWithEntities(entities);
-    console.log(store.readState());
     store.deleteEntity("dragonEntityKey");
 
     const dragonEntityKeyExists = store.entityKeyExists("dragonEntityKey");
