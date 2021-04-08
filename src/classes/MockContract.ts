@@ -7,12 +7,12 @@ import {
   IMockFunctionArgs,
   IRunFunctionArgs,
 } from "../models/Contract";
-import Event from "./Event";
 
 export default class MockContract {
+  public events: IAbiItem[];
+
   private mockReturns: Map<string, () => {}> = new Map();
   private functions: IAbiItem[];
-  private events: IAbiItem[];
 
   constructor(abi: IAbiItem[]) {
     const web3 = new Web3();

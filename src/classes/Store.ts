@@ -1,5 +1,6 @@
 import { assert } from "chai";
 import equal from "fast-deep-equal/es6";
+import Event from "../classes/Event";
 import Entity from "./Entity";
 
 export default class Store {
@@ -29,6 +30,10 @@ export default class Store {
   public addEntity = (entityKey: string, entity: Entity): void => {
     assert(entityKey.trim() !== "", "Entity key cannot be an empty string.");
     this.state.set(entityKey, entity);
+  }
+
+  public addEventEntity = (key: string, event: Event) => {
+    this.addEntity(key, new Entity(event.name, "Event", event.parameters));
   }
 
   public deleteEntity = (entityKey: string): void => {
