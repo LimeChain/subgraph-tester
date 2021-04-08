@@ -10,8 +10,8 @@ import {
 
 export default class MockContract {
   private mockReturns: Map<string, () => {}> = new Map();
-  private functions: any[];
-  private events: any[];
+  private functions: IAbiItem[];
+  private events: IAbiItem[];
 
   constructor(abi: IAbiItem[]) {
     const web3 = new Web3();
