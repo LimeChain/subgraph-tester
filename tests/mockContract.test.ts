@@ -1,10 +1,10 @@
 import { expect } from "chai";
 import MockContract from "../src/classes/MockContract";
 import { IMockFunctionArgs, IRunFunctionArgs } from "../src/models/Contract";
-import { address, ERC20TransferABI } from "./mocks/sampleContractABI";
+import { ERC20TransferABI } from "./mocks/sampleContractABI";
 
 describe("Contract functions", () => {
-  const mockContract = new MockContract(ERC20TransferABI, address);
+  const mockContract = new MockContract(ERC20TransferABI);
 
   const testReturnValue = () => {
     return "myReturnValue";
