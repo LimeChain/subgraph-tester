@@ -26,16 +26,16 @@ describe("Store", () => {
     const endStateJson = store.readState();
     const endStateMap = new Map(JSON.parse(endStateJson));
 
-    expect(endStateMap).to.have.lengthOf(2);
-    expect(entitiesJson).to.be.equal(endStateJson);
+    expect(endStateMap).length(2);
+    expect(entitiesJson).equals(endStateJson);
   });
 
   it("Should hydrate the state with a store JSON", () => {
     store.hydrateWithJson(JSON.stringify(fantasyEntities));
 
     const endStateMap = new Map(JSON.parse(store.readState()));
-    expect(endStateMap).to.have.lengthOf(3);
-    expect(JSON.stringify(Array.from(endStateMap.entries()))).to.equal(
+    expect(endStateMap).length(3);
+    expect(JSON.stringify(Array.from(endStateMap.entries()))).equals(
       JSON.stringify(fantasyEntities),
     );
   });
@@ -46,8 +46,7 @@ describe("Store", () => {
     const deepEqual = store.assertStateSnapshotEq(
       JSON.stringify(fantasyEntities),
     );
-    // tslint:disable-next-line: no-unused-expression
-    expect(deepEqual).to.be.true;
+    expect(deepEqual).equals(true);
   });
 
   it("Should deeply compare the state to a given JSON snapshot and return false when they are not equal", () => {
@@ -56,8 +55,7 @@ describe("Store", () => {
     const deepEqual = store.assertStateSnapshotEq(
       JSON.stringify(sciFiEntities),
     );
-    // tslint:disable-next-line: no-unused-expression
-    expect(deepEqual).to.be.false;
+    expect(deepEqual).equals(false);
   });
 
   it("Fails when attempting to hydrate a non-empty state", () => {
@@ -65,13 +63,13 @@ describe("Store", () => {
 
     expect(() => {
       store.hydrateWithJson(JSON.stringify(sciFiEntities));
-    }).to.throw(
+    }).throws(
       `State is not empty. Please use state.clear() to clear the state before hydrating.`,
     );
 
     expect(() => {
       store.hydrateWithEntities(entities);
-    }).to.throw(
+    }).throws(
       `State is not empty. Please use state.clear() to clear the state before hydrating.`,
     );
   });
@@ -79,13 +77,13 @@ describe("Store", () => {
   it("Fails when attempting ot hydrate state with an empty map", () => {
     expect(() => {
       store.hydrateWithJson("   ");
-    }).to.throw(`JSON cannot be an empty string.`);
+    }).throws(`JSON cannot be an empty string.`);
   });
 
   it("Fails when asserting equality of snapshot when state is empty", () => {
     expect(() => {
       store.assertStateSnapshotEq(JSON.stringify(fantasyEntities));
-    }).to.throw(
+    }).throws(
       `Cannot check for equality when the state is empty. You need to first hydrate the state.`,
     );
   });
@@ -95,7 +93,7 @@ describe("Store", () => {
 
     expect(() => {
       store.assertStateSnapshotEq(JSON.stringify("  "));
-    }).to.throw();
+    }).throws();
   });
 
   it("Fails when providing an empty entity key when asserting equality of Entity objects", () => {
@@ -103,7 +101,7 @@ describe("Store", () => {
 
     expect(() => {
       store.assertEntityEq("  ", dragonEntity);
-    }).to.throw(`Entity key cannot be an empty string.`);
+    }).throws(`Entity key cannot be an empty string.`);
   });
 
   // tslint:disable-next-line: max-line-length
@@ -112,39 +110,34 @@ describe("Store", () => {
 
     expect(() => {
       store.assertEntityEq("rabbitEntityKey", dragonEntity);
-    }).to.throw(`Entity key rabbitEntityKey not found in the state.`);
+    }).throws(`Entity key rabbitEntityKey not found in the state.`);
   });
 
   it("Checks properly for entity equality", () => {
     store.hydrateWithEntities(entities);
 
     let equal = store.assertEntityEq("dragonEntityKey", dragonEntity);
-    // tslint:disable-next-line: no-unused-expression
-    expect(equal).to.be.true;
+    expect(equal).equals(true);
 
     equal = store.assertEntityEq("dragonEntityKey", coinEntity);
-    // tslint:disable-next-line: no-unused-expression
-    expect(equal).to.be.false;
+    expect(equal).equals(false);
   });
 
   it("Correctly checks whether entity object exists in the state", () => {
     store.hydrateWithEntities(entities);
 
     let exists = store.entityExists(dragonEntity);
-    // tslint:disable-next-line: no-unused-expression
-    expect(exists).to.be.true;
+    expect(exists).equals(true);
 
     exists = store.entityExists(rabbitEntity);
-    // tslint:disable-next-line: no-unused-expression
-    expect(exists).to.be.false;
+    expect(exists).equals(false);
   });
 
   it("Correctly checks whether entity key exists in the state", () => {
     store.hydrateWithEntities(entities);
 
     const exists = store.entityKeyExists("dragonEntityKey");
-    // tslint:disable-next-line: no-unused-expression
-    expect(exists).to.be.true;
+    expect(exists).equals(true);
   });
 
   it("Fails when checking whether entity key exists in state when the given key is an empty string", () => {
@@ -152,15 +145,15 @@ describe("Store", () => {
 
     expect(() => {
       store.entityKeyExists("  ");
-    }).to.throw(`Entity key cannot be an empty string.`);
+    }).throws(`Entity key cannot be an empty string.`);
   });
 
   it("Clears state successfully", () => {
     store.hydrateWithEntities(entities);
-    expect(store.size()).to.be.equal(2);
+    expect(store.size()).equals(2);
 
     store.clear();
-    expect(store.size()).to.be.equal(0);
+    expect(store.size()).equals(0);
   });
 
   it("Can add new entity", () => {
@@ -168,12 +161,10 @@ describe("Store", () => {
     store.addEntity("rabbitEntityKey", rabbitEntity);
 
     const newEntityExists = store.entityExists(rabbitEntity);
-    // tslint:disable-next-line: no-unused-expression
-    expect(newEntityExists).to.be.true;
+    expect(newEntityExists).equals(true);
 
     const entityKeyExists = store.entityKeyExists("rabbitEntityKey");
-    // tslint:disable-next-line: no-unused-expression
-    expect(entityKeyExists).to.be.true;
+    expect(entityKeyExists).equals(true);
   });
 
   it("Fails if an empty string is provided when adding a new entity", () => {
@@ -181,7 +172,7 @@ describe("Store", () => {
 
     expect(() => {
       store.addEntity("  ", rabbitEntity);
-    }).to.throw(`Entity key cannot be an empty string.`);
+    }).throws(`Entity key cannot be an empty string.`);
   });
 
   it("Fails if an empty string is provided when deleting an entity", () => {
@@ -189,7 +180,7 @@ describe("Store", () => {
 
     expect(() => {
       store.deleteEntity("  ");
-    }).to.throw(`Entity key cannot be an empty string.`);
+    }).throws(`Entity key cannot be an empty string.`);
   });
 
   it("Fails if a key that doesn't exist in the store is provided when attempting to delete an entity", () => {
@@ -197,7 +188,7 @@ describe("Store", () => {
 
     expect(() => {
       store.deleteEntity("FishEntityKey");
-    }).to.throw(`Entity key FishEntityKey not found in the state.`);
+    }).throws(`Entity key FishEntityKey not found in the state.`);
   });
 
   it("Can successfully delete an entity", () => {
@@ -206,10 +197,8 @@ describe("Store", () => {
 
     const dragonEntityKeyExists = store.entityKeyExists("dragonEntityKey");
     const dragonEntityExists = store.entityExists(dragonEntity);
-    // tslint:disable-next-line: no-unused-expression
-    expect(dragonEntityKeyExists).to.be.false;
-    // tslint:disable-next-line: no-unused-expression
-    expect(dragonEntityExists).to.be.false;
-    expect(store.size()).to.be.equal(1);
+    expect(dragonEntityKeyExists).equals(false);
+    expect(dragonEntityExists).equals(false);
+    expect(store.size()).equals(1);
   });
 });
