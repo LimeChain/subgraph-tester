@@ -12,7 +12,7 @@ export default class MockContract {
   public abi: IAbiItem[];
   private mockReturns: Map<string, () => {}> = new Map();
 
-  private functions: any;
+  private functions: any[];
 
   constructor(abi: IAbiItem[]) {
     const web3 = new Web3();
