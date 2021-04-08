@@ -69,7 +69,7 @@ export default class MockContract {
   }
 
   public emitEvent = (event: Event) => {
-    assert(event.name in this.events, `Event ${event} does not exist in the contract.`);
+    assert(event.name in this.events, `Event ${event.name} does not exist in the contract.`);
     this.emittedEvents.push(event);
   }
 
