@@ -1,18 +1,9 @@
 import { expect } from "chai";
 import Event from "../src/classes/Event";
-import MockContract from "../src/classes/MockContract";
 import Store from "../src/classes/Store";
-import { ERC20TransferABI } from "./mocks/sampleContractABI";
 
 describe("Contract events", () => {
-  const mockContract = new MockContract(ERC20TransferABI);
   const store = new Store();
-
-  const simpleTransferEvent = new Event("Transfer", {
-    amount: 20,
-    from: "323",
-    to: "534",
-  });
 
   const transferEventWithReason = new Event("Transfer", {
     amount: 15,
