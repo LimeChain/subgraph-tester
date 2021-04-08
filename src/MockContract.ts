@@ -10,17 +10,15 @@ import {
 
 export default class MockContract {
   public abi: IAbiItem[];
-  public address: string;
   private mockReturns: Map<string, () => {}> = new Map();
 
   private functions: any;
 
-  constructor(abi: IAbiItem[], address: string) {
+  constructor(abi: IAbiItem[]) {
     const web3 = new Web3();
     const testContract = new web3.eth.Contract(abi);
 
     this.abi = abi;
-    this.address = address;
     this.functions = testContract.methods;
   }
 
