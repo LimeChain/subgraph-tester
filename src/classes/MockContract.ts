@@ -9,8 +9,6 @@ import {
 } from "../models/Contract";
 
 export default class MockContract {
-  public events: IAbiItem[];
-
   private mockReturns: Map<string, () => {}> = new Map();
   private functions: IAbiItem[];
 
@@ -18,7 +16,6 @@ export default class MockContract {
     const web3 = new Web3();
     const testContract = new web3.eth.Contract(abi);
     this.functions = testContract.methods;
-    this.events = testContract.events;
   }
 
   public mockFunction = ({
