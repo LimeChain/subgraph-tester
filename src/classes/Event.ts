@@ -1,4 +1,3 @@
-
 export default class Event {
     public parameters: any[];
     public name: string;

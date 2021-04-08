@@ -11,7 +11,6 @@ import Event from "./Event";
 
 export default class MockContract {
   private mockReturns: Map<string, () => {}> = new Map();
-  private emittedEvents = Array<Event>();
   private functions: IAbiItem[];
   private events: IAbiItem[];
 
@@ -65,25 +64,5 @@ export default class MockContract {
 
   public clearMocks = () => {
     this.mockReturns.clear();
-  }
-
-  public clearEmittedEvents = () => {
-    this.emittedEvents = [];
-  }
-
-  public emitEvent = (event: Event) => {
-    assert(
-      event.name in this.events,
-      `Event ${event.name} does not exist in the contract.`,
-    );
-    this.emittedEvents.push(event);
-  }
-
-  public printEmittedEvents = (): string => {
-    return JSON.stringify(this.emittedEvents);
-  }
-
-  public emittedEventsCount = (): number => {
-    return this.emittedEvents.length;
   }
 }
