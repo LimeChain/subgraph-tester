@@ -29,7 +29,7 @@ describe("Contract functions", () => {
         ...baseMockFunctionArgs,
         fName: "nonExistent",
       });
-    }).to.throw("Function does not exist in contract.");
+    }).to.throw("Function nonExistent does not exist in contract.");
   });
 
   it("Can mock contract function and return mocked value", () => {

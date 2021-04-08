@@ -7,9 +7,11 @@ import {
   IMockFunctionArgs,
   IRunFunctionArgs,
 } from "../models/Contract";
+import Event from "./Event";
 
 export default class MockContract {
   private mockReturns: Map<string, () => {}> = new Map();
+  private emittedEvents = Array<Event>();
   private functions: IAbiItem[];
   private events: IAbiItem[];
 
@@ -30,7 +32,7 @@ export default class MockContract {
     const raw = withArgs ? fName.concat(JSON.stringify(withArgs)) : fName;
     const key = sha256(raw).toString();
 
-    assert(fName in this.functions, "Function does not exist in contract.");
+    assert(fName in this.functions, `Function ${fName} does not exist in contract.`);
 
     const revertsResponse = () => {
       throw Error(
@@ -60,5 +62,18 @@ export default class MockContract {
 
   public clearMocks = () => {
     this.mockReturns.clear();
+  }
+
+  public clearEmittedEvents = () => {
+    this.emittedEvents = [];
+  }
+
+  public emitEvent = (event: Event) => {
+    assert(event.name in this.events, `Event ${event} does not exist in the contract.`);
+    this.emittedEvents.push(event);
+  }
+
+  public getEmittedEvents = (): string => {
+    return JSON.stringify(this.events);
   }
 }
