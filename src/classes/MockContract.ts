@@ -32,7 +32,10 @@ export default class MockContract {
     const raw = withArgs ? fName.concat(JSON.stringify(withArgs)) : fName;
     const key = sha256(raw).toString();
 
-    assert(fName in this.functions, `Function ${fName} does not exist in contract.`);
+    assert(
+      fName in this.functions,
+      `Function ${fName} does not exist in contract.`,
+    );
 
     const revertsResponse = () => {
       throw Error(
@@ -69,11 +72,18 @@ export default class MockContract {
   }
 
   public emitEvent = (event: Event) => {
-    assert(event.name in this.events, `Event ${event.name} does not exist in the contract.`);
+    assert(
+      event.name in this.events,
+      `Event ${event.name} does not exist in the contract.`,
+    );
     this.emittedEvents.push(event);
   }
 
-  public getEmittedEvents = (): string => {
-    return JSON.stringify(this.events);
+  public printEmittedEvents = (): string => {
+    return JSON.stringify(this.emittedEvents);
+  }
+
+  public emittedEventsCount = (): number => {
+    return this.emittedEvents.length;
   }
 }

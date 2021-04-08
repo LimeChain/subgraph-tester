@@ -29,12 +29,12 @@ describe("Contract functions", () => {
         ...baseMockFunctionArgs,
         fName: "nonExistent",
       });
-    }).to.throw("Function nonExistent does not exist in contract.");
+    }).throws("Function nonExistent does not exist in contract.");
   });
 
   it("Can mock contract function and return mocked value", () => {
     mockContract.mockFunction(baseMockFunctionArgs);
-    expect(mockContract.runFunction(baseRunFunctionArgs)).to.be.equal(
+    expect(mockContract.runFunction(baseRunFunctionArgs)).equals(
       "myReturnValue",
     );
   });
@@ -50,7 +50,7 @@ describe("Contract functions", () => {
       mockReturn: updatedReturnValue,
     });
 
-    expect(mockContract.runFunction(baseRunFunctionArgs)).to.be.equal(
+    expect(mockContract.runFunction(baseRunFunctionArgs)).equals(
       "myUpdatedReturnValue",
     );
   });
@@ -58,7 +58,7 @@ describe("Contract functions", () => {
   it("Fails when attempting to run function that hasn't been mocked yet", () => {
     expect(() => {
       mockContract.runFunction(baseRunFunctionArgs);
-    }).to.throw("This function has not been mocked yet.");
+    }).throws("This function has not been mocked yet.");
   });
 
   it("Mocked function can be more complex and affect wider scope", () => {
@@ -74,7 +74,7 @@ describe("Contract functions", () => {
     });
 
     mockContract.runFunction(baseRunFunctionArgs);
-    expect(num).to.be.equal(2);
+    expect(num).equals(2);
   });
 
   it("Can pass optional arguments to mocked function", () => {
@@ -90,7 +90,7 @@ describe("Contract functions", () => {
 
     expect(
       mockContract.runFunction({ ...baseRunFunctionArgs, withArgs: ["ping"] }),
-    ).to.be.equal("pong");
+    ).equals("pong");
   });
 
   it("Can pass multiple optional arguments to mocked function", () => {
@@ -109,7 +109,7 @@ describe("Contract functions", () => {
         ...baseRunFunctionArgs,
         withArgs: ["ping", 1, 5],
       }),
-    ).to.be.equal("ping pong ping");
+    ).equals("ping pong ping");
   });
 
   it("Can mock function revert with a message", () => {
@@ -120,7 +120,7 @@ describe("Contract functions", () => {
     });
     expect(() => {
       mockContract.runFunction(baseRunFunctionArgs);
-    }).to.throw(
+    }).throws(
       `Function "${baseRunFunctionArgs.fName}" reverted. Reason: Not enough balance`,
     );
   });
@@ -129,7 +129,7 @@ describe("Contract functions", () => {
     mockContract.mockFunction({ ...baseMockFunctionArgs, reverts: true });
     expect(() => {
       mockContract.runFunction(baseRunFunctionArgs);
-    }).to.throw(
+    }).throws(
       `Function "${baseRunFunctionArgs.fName}" reverted. No reason specified.`,
     );
   });

@@ -6,12 +6,12 @@ import { ERC20TransferABI } from "./mocks/sampleContractABI";
 describe("Contract events", () => {
   const mockContract = new MockContract(ERC20TransferABI);
 
-  const firstTransferEvent = new Event("Transfer", {
+  const transferEvent = new Event("Transfer", {
     amount: 15,
     from: "456",
     to: "674",
   });
-  const secondTransferEvent = new Event("Transfer", {
+  const anotherTransferEvent = new Event("Transfer", {
     amount: 20,
     from: "323",
     to: "534",
@@ -22,14 +22,34 @@ describe("Contract events", () => {
   });
 
   it("Can emit events successfully", () => {
-    mockContract.emitEvent(firstTransferEvent);
-    mockContract.emitEvent(secondTransferEvent);
+    mockContract.emitEvent(transferEvent);
+    mockContract.emitEvent(anotherTransferEvent);
 
-    expect(mockContract.getEmittedEvents()).length(2);
+    expect(mockContract.emittedEventsCount()).equals(2);
   });
 
   it("Faild when trying to emit event that does not exist in the contract", () => {
     const nonExistentEvent = new Event("someEvent", {});
-    mockContract.emitEvent(nonExistentEvent);
+
+    expect(() => {
+      mockContract.emitEvent(nonExistentEvent);
+    }).throws(`Event ${nonExistentEvent.name} does not exist in the contract.`);
+  });
+
+  it("Clear function clears event array", () => {
+    mockContract.emitEvent(transferEvent);
+    expect(mockContract.emittedEventsCount()).equals(1);
+    mockContract.clearEmittedEvents();
+    expect(mockContract.emittedEventsCount()).equals(0);
+  });
+
+  it("Print function works correctly", () => {
+    mockContract.emitEvent(transferEvent);
+    mockContract.emitEvent(anotherTransferEvent);
+
+    const emittedEvents = mockContract.printEmittedEvents();
+    expect(emittedEvents).equals(
+      JSON.stringify([transferEvent, anotherTransferEvent]),
+    );
   });
 });
