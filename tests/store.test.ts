@@ -104,8 +104,7 @@ describe("Store", () => {
     }).throws(`Entity key cannot be an empty string.`);
   });
 
-  // tslint:disable-next-line: max-line-length
-  it("Fails when attempting to assert equality of entities when the given entity key does not exist in the state", () => {
+  it("Fails entity equality assertion when entity key doesn't exist in state", () => {
     store.hydrateWithJson(JSON.stringify(fantasyEntities));
 
     expect(() => {
