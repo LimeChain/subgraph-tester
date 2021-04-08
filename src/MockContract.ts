@@ -16,8 +16,8 @@ export default class MockContract {
   private functions: any;
 
   constructor(abi: IAbiItem[], address: string) {
-    const web3 = new Web3("https://cloudflare-eth.com");
-    const testContract = new web3.eth.Contract(abi, address);
+    const web3 = new Web3();
+    const testContract = new web3.eth.Contract(abi);
 
     this.abi = abi;
     this.address = address;
