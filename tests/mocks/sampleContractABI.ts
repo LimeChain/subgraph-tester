@@ -115,4 +115,31 @@ export const ERC20TransferABI: IAbiItem[] = [
     name: "Transfer",
     type: "event",
   },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        name: "id",
+        type: "string",
+      },
+      {
+        indexed: true,
+        name: "owner",
+        type: "address",
+      },
+      {
+        indexed: false,
+        name: "displayName",
+        type: "string",
+      },
+      {
+        indexed: false,
+        name: "imageUrl",
+        type: "string",
+      },
+    ],
+    name: "NewGravatar",
+    type: "event",
+  },
 ];
