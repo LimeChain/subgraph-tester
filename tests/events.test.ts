@@ -1,29 +1,11 @@
-import { expect } from "chai";
-import Event from "../src/classes/Event";
-import Store from "../src/classes/Store";
+import SubgraphData from "../src/classes/SubgraphData";
+import yamlString from "./mocks/subgraphYml";
 
 describe("Contract events", () => {
-  const store = new Store();
+  it("Can parse .yml file correctly.", () => {
+    const subgraphData = new SubgraphData(yamlString);
 
-  const transferEventWithReason = new Event("Transfer", {
-    amount: 15,
-    from: "456",
-    reason: "salary",
-    to: "674",
-  });
-
-  it("Can run a handler function on an event", () => {
-    let resolverEvent: Event;
-
-    const handleTransfer = (transferEvent: Event) => {
-      resolverEvent = new Event("Transfer");
-      resolverEvent.parameters.reason = transferEvent.parameters.reason;
-      resolverEvent.parameters.amount = transferEvent.parameters.amount + 100;
-      store.addEventEntity("transferEventWithoutReasonKey", resolverEvent);
-    };
-
-    handleTransfer(transferEventWithReason);
-    expect(store.size()).equals(1);
-    expect(store.entityKeyExists("transferEventWithoutReasonKey")).equals(true);
+    // TODO: Should we always get the first?
+    // const eventsData = subgraphData.data.dataSources[0].mapping.eventHandlers;
   });
 });
