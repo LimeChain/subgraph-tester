@@ -3,8 +3,17 @@ import equal from "fast-deep-equal/es6";
 import Event from "../classes/Event";
 import Entity from "./Entity";
 
+// tslint:disable-next-line: no-var-requires
+const sparkles = require("sparkles")();
+
 export default class Store {
   private state: Map<string, Entity> = new Map();
+
+  constructor() {
+    sparkles.on("persistEvent", (event: any) => {
+      this.addEventEntity(event.id, event);
+    });
+  }
 
   public hydrateWithEntities = (entities: Map<string, Entity>) => {
     assert(
