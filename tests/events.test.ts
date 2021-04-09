@@ -16,7 +16,7 @@ describe("Contract events", () => {
     let resolverEvent: Event;
 
     const handleTransfer = (transferEvent: Event) => {
-      resolverEvent = new Event("Transfer", {});
+      resolverEvent = new Event("Transfer");
       resolverEvent.parameters.reason = transferEvent.parameters.reason;
       resolverEvent.parameters.amount = transferEvent.parameters.amount + 100;
       store.addEventEntity("transferEventWithoutReasonKey", resolverEvent);
