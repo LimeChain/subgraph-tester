@@ -23,6 +23,10 @@ export default class SubgraphData {
     return this.events;
   }
 
+  public printAllData = () => {
+      return JSON.stringify(this.data);
+  }
+
   private getEventNames = (eventHandles: IEventHandler[]) => {
     return Array.from(eventHandles).map((eh: IEventHandler) => {
       return eh.event.substring(0, eh.event.indexOf("("));

@@ -1,9 +1,9 @@
 export default class Event {
-    public parameters: any;
+    public params: any;
     public name: string;
 
-    constructor(name: string, parameters?: any) {
-        this.parameters = parameters || {};
+    constructor(name: string, params?: any) {
+        this.params = params || {};
         this.name = name;
     }
 }

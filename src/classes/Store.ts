@@ -33,7 +33,7 @@ export default class Store {
   }
 
   public addEventEntity = (key: string, event: Event) => {
-    this.addEntity(key, new Entity(event.name, "Event", event.parameters));
+    this.addEntity(key, new Entity(event.name, "Event", event.params));
   }
 
   public deleteEntity = (entityKey: string): void => {
