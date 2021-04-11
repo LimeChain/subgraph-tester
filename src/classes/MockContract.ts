@@ -6,7 +6,7 @@ import {
   IAbiItem,
   IMockFunctionArgs,
   IRunFunctionArgs,
-} from "./models/Contract";
+} from "../models/Contract";
 
 export default class MockContract {
   private mockReturns: Map<string, () => {}> = new Map();

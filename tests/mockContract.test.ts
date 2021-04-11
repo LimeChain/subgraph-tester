@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import MockContract from "../src/MockContract";
+import MockContract from "../src/classes/MockContract";
 import { IMockFunctionArgs, IRunFunctionArgs } from "../src/models/Contract";
 import { ERC20TransferABI } from "./mocks/sampleContractABI";
 
