@@ -1,5 +1,5 @@
 import { assert } from "chai";
-import equal from "fast-deep-equal/es6";
+import sha256 from "crypto-js/sha256";
 import Entity from "./Entity";
 
 // tslint:disable-next-line: no-var-requires
@@ -76,9 +76,10 @@ export default class Store {
       "Cannot check for equality when the state is empty. You need to first hydrate the state.",
     );
 
-    const snapshotMap: Map<string, Entity> = new Map(JSON.parse(snapshot));
+    const snapshotHash = sha256(snapshot).toString();
+    const stateHash = sha256(this.readStateJson()).toString();
     assert(
-      equal(snapshotMap, this.state),
+      snapshotHash === stateHash,
       "Provided snapshot map is not equal to the store.",
     );
   }
