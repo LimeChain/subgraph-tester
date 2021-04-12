@@ -2,6 +2,7 @@ import { expect } from "chai";
 import Event from "../src/classes/Event";
 import Store from "../src/classes/Store";
 import SubgraphData from "../src/classes/SubgraphData";
+import "../src/extensions/string";
 import Gravatar from "./mocks/Gravatar";
 import yamlString from "./mocks/subgraphYml";
 
@@ -18,7 +19,7 @@ describe("Contract events", () => {
 
   // Example mapping function
   function handleNewGravatar(event: NewGravatar): void {
-    const gravatar = new Gravatar(event.params.id);
+    const gravatar = new Gravatar(event.params.id.toHex());
     gravatar.owner = event.params.owner;
     gravatar.displayName = event.params.displayName;
     gravatar.imageUrl = event.params.imageUrl;
