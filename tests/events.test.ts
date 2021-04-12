@@ -16,7 +16,12 @@ describe("Contract events", () => {
     }
   }
 
-  const newGravatar: NewGravatar = new NewGravatar({ id: "444" });
+  const newGravatar: NewGravatar = new NewGravatar({
+    color: "purple",
+    displayName: "Harold",
+    id: "444",
+    owner: "0x1234567",
+  });
 
   // Example mapping function
   function handleNewGravatar(event: NewGravatar): void {
@@ -40,8 +45,11 @@ describe("Contract events", () => {
 
   it("Can call function handler and populate the state", () => {
     handleNewGravatar(newGravatar);
+    expect(store.readStateMap()).length(1);
 
-    const storeMap = store.readStateMap();
-    expect(storeMap).length(1);
+    const storeMapJSON = store.readStateJson();
+    expect(storeMapJSON).equals(
+      `[["343434",{"id":"343434","params":{"owner":"0x1234567","displayName":"Harold","id":"343434"}}]]`,
+    );
   });
 });
