@@ -16,7 +16,6 @@ describe("Store", () => {
 
   beforeEach(() => {
     store = new Store();
-
     entities.set("dragonEntityKey", dragonEntity);
     entities.set("coinEntityKey", coinEntity);
     entities.delete("rabbitEntityKey");
