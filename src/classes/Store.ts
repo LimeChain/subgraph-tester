@@ -42,6 +42,21 @@ export default class Store {
 
   public addEntity = (entityKey: string, entity: Entity): void => {
     assert(entityKey.trim() !== "", "Entity key cannot be an empty string.");
+    assert(
+      this.state.get(entityKey) === undefined,
+      `Entity with key ${entityKey} already exists in the state. If you want to update it, use state.updateEntity().`,
+    );
+
+    this.state.set(entityKey, entity);
+  }
+
+  public updateEntity = (entityKey: string, entity: Entity): void => {
+    assert(entityKey.trim() !== "", "Entity key cannot be an empty string.");
+    assert(
+      this.state.get(entityKey) !== undefined,
+      `Entity key ${entityKey} not found in state. Try adding the entity first with store.addEntity().`,
+    );
+
     this.state.set(entityKey, entity);
   }
 

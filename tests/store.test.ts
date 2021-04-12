@@ -39,7 +39,7 @@ describe("Store", () => {
     const endStateMap = store.readStateMap();
     expect(endStateMap).length(3);
     expect(JSON.stringify(Array.from(endStateMap.entries()))).equals(
-      JSON.stringify(fantasyEntities)
+      JSON.stringify(fantasyEntities),
     );
   });
 
@@ -64,13 +64,13 @@ describe("Store", () => {
     expect(() => {
       store.hydrateWithJson(JSON.stringify(sciFiEntities));
     }).throws(
-      `State is not empty. Please use state.clear() to clear the state before hydrating.`
+      `State is not empty. Please use state.clear() to clear the state before hydrating.`,
     );
 
     expect(() => {
       store.hydrateWithEntities(entities);
     }).throws(
-      `State is not empty. Please use state.clear() to clear the state before hydrating.`
+      `State is not empty. Please use state.clear() to clear the state before hydrating.`,
     );
   });
 
@@ -84,7 +84,7 @@ describe("Store", () => {
     expect(() => {
       store.assertStateSnapshotEq(JSON.stringify(fantasyEntities));
     }).throws(
-      `Cannot check for equality when the state is empty. You need to first hydrate the state.`
+      `Cannot check for equality when the state is empty. You need to first hydrate the state.`,
     );
   });
 
@@ -121,7 +121,7 @@ describe("Store", () => {
     expect(() => {
       store.assertEntityEq("dragonEntityKey", coinEntity);
     }).throws(
-      `Provided entity is not equal to corresponding entity with given entity key in the state.`
+      `Provided entity is not equal to corresponding entity with given entity key in the state.`,
     );
   });
 
@@ -202,5 +202,45 @@ describe("Store", () => {
     expect(dragonEntityKeyExists).equals(false);
     expect(dragonEntityExists).equals(false);
     expect(store.size()).equals(1);
+  });
+
+  it("Fails to add an entity if the given key already exists in the state", () => {
+    store.hydrateWithEntities(entities);
+    const anotherDragonEntity = new Entity("688", "The dragon is purple");
+
+    expect(() => {
+      store.addEntity("dragonEntityKey", anotherDragonEntity);
+    }).throws(
+      // tslint:disable-next-line: max-line-length
+      `Entity with key dragonEntityKey already exists in the state. If you want to update it, use state.updateEntity().`,
+    );
+  });
+
+  it("Updates entity correctly", () => {
+    store.hydrateWithEntities(entities);
+    const updatedDragonEntity = new Entity("688", "The dragon is purple");
+
+    store.updateEntity("dragonEntityKey", updatedDragonEntity);
+    expect(store.entityExists(updatedDragonEntity)).equals(true);
+  });
+
+  it("Fails when trying to update entity with an empty key", () => {
+    store.hydrateWithEntities(entities);
+    const updatedDragonEntity = new Entity("688", "The dragon is purple");
+
+    expect(() => {
+      store.updateEntity("  ", updatedDragonEntity);
+    }).throws(`Entity key cannot be an empty string.`);
+  });
+
+  it("Fails when trying to update an entity that does not yet exist in the state", () => {
+    store.hydrateWithEntities(entities);
+    const updatedDragonEntity = new Entity("688", "The dragon is purple");
+
+    expect(() => {
+      store.updateEntity("purpleDragonEntityKey", updatedDragonEntity);
+    }).throws(
+      `Entity key purpleDragonEntityKey not found in state. Try adding the entity first with store.addEntity().`,
+    );
   });
 });
