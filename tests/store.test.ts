@@ -5,9 +5,9 @@ import { fantasyEntities, sciFiEntities } from "./mocks/mockEntities";
 
 describe("Store", () => {
   const entities: Map<string, Entity> = new Map();
-  const dragonEntity = new Entity("1", "Dragon", "The dragon is green");
-  const coinEntity = new Entity("34", "Coin", "Old coin made of silver");
-  const rabbitEntity = new Entity("66", "Animal", {
+  const dragonEntity = new Entity("1", "The dragon is green");
+  const coinEntity = new Entity("34", "Old coin made of silver");
+  const rabbitEntity = new Entity("66", {
     color: "White",
     speed: 10,
   });
@@ -26,8 +26,8 @@ describe("Store", () => {
     store.hydrateWithEntities(entities);
 
     const entitiesJson = JSON.stringify(Array.from(entities.entries()));
-    const endStateJson = store.readState();
-    const endStateMap = new Map(JSON.parse(endStateJson));
+    const endStateJson = store.readStateJson();
+    const endStateMap = store.readStateMap();
 
     expect(endStateMap).length(2);
     expect(entitiesJson).equals(endStateJson);
@@ -36,7 +36,7 @@ describe("Store", () => {
   it("Should hydrate the state with a store JSON", () => {
     store.hydrateWithJson(JSON.stringify(fantasyEntities));
 
-    const endStateMap = new Map(JSON.parse(store.readState()));
+    const endStateMap = store.readStateMap();
     expect(endStateMap).length(3);
     expect(JSON.stringify(Array.from(endStateMap.entries()))).equals(
       JSON.stringify(fantasyEntities)

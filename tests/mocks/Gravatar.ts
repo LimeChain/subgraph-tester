@@ -12,6 +12,6 @@ export default class Gravatar {
   }
 
   public save = () => {
-    sparkles.emit("persistEvent", this);
+    sparkles.emit("persistEntity", this);
   }
 }

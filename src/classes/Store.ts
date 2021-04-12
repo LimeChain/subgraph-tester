@@ -1,6 +1,5 @@
 import { assert } from "chai";
 import equal from "fast-deep-equal/es6";
-import Event from "../classes/Event";
 import Entity from "./Entity";
 
 // tslint:disable-next-line: no-var-requires
@@ -10,8 +9,9 @@ export default class Store {
   private state: Map<string, Entity> = new Map();
 
   constructor() {
-    sparkles.on("persistEvent", (event: any) => {
-      this.addEventEntity(event.id, event);
+    sparkles.on("persistEntity", (item: any) => {
+      const entity = new Entity(item.id, item);
+      this.addEntity(item.id, entity);
     });
   }
 
@@ -32,17 +32,17 @@ export default class Store {
     this.state = new Map(JSON.parse(stringifiedJson));
   }
 
-  public readState = () => {
+  public readStateJson = () => {
     return JSON.stringify(Array.from(this.state.entries()));
+  }
+
+  public readStateMap = (): Map<string, Entity> => {
+    return new Map(this.state);
   }
 
   public addEntity = (entityKey: string, entity: Entity): void => {
     assert(entityKey.trim() !== "", "Entity key cannot be an empty string.");
     this.state.set(entityKey, entity);
-  }
-
-  public addEventEntity = (key: string, event: Event) => {
-    this.addEntity(key, new Entity(event.name, "Event", event.params));
   }
 
   public deleteEntity = (entityKey: string): void => {

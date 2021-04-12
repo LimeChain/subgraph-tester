@@ -25,15 +25,21 @@ describe("Contract events", () => {
     gravatar.save();
   }
 
-  handleNewGravatar(newGravatar);
+  const subgraphData = new SubgraphData(yamlString);
+  const events = subgraphData.getEvents();
+  const eventsArray = Array.from(events.entries());
 
   it("Can parse .yml file and get events correctly.", () => {
-    const subgraphData = new SubgraphData(yamlString);
-    const events = subgraphData.getEvents();
-    const eventsArray = Array.from(events.entries());
     expect(eventsArray).length(3);
     expect(JSON.stringify(eventsArray)).equals(
       `[[0,"Transfer"],[1,"Approval"],[2,"NewGravatar"]]`,
     );
+  });
+
+  it("Can call function handler and populate the state", () => {
+    handleNewGravatar(newGravatar);
+
+    const storeMap = store.readStateMap();
+    expect(storeMap).length(1);
   });
 });

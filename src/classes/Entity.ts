@@ -1,11 +1,9 @@
 export default class Entity {
     public id: string;
-    public type: string;
-    public data: any;
+    public params: any;
 
-    constructor(id: string, type: string, data: any) {
+    constructor(id: string, params: any) {
         this.id = id;
-        this.type = type;
-        this.data = data || {};
+        this.params = params || {};
     }
 }
