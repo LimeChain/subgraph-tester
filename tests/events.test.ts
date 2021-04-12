@@ -2,6 +2,7 @@ import { expect } from "chai";
 import Event from "../src/classes/Event";
 import Store from "../src/classes/Store";
 import SubgraphData from "../src/classes/SubgraphData";
+import "../src/extensions/object";
 import "../src/extensions/string";
 import Gravatar from "./mocks/Gravatar";
 import yamlString from "./mocks/subgraphYml";

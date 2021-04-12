@@ -1,6 +1,3 @@
-// tslint:disable-next-line: no-var-requires
-const sparkles = require("sparkles")();
-
 export default class Gravatar {
   public id: string | number;
   public owner: string = "";
@@ -9,9 +6,5 @@ export default class Gravatar {
 
   constructor(id: string | number) {
     this.id = id;
-  }
-
-  public save = () => {
-    sparkles.emit("persistEntity", this);
   }
 }
