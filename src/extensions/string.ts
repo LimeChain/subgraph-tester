@@ -5,4 +5,4 @@ interface String {
 
 String.prototype.toHex = function(): string {
     return Buffer.from(this.toString(), "utf-8").toString("hex");
-}
+};
