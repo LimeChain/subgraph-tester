@@ -92,7 +92,7 @@ export default class Store {
     );
 
     assert(
-      equal(this.state.get(entityKey), entity),
+      entity.equals(this.state.get(entityKey)!),
       "Provided entity is not equal to corresponding entity with given entity key in the state.",
     );
   }
@@ -103,7 +103,7 @@ export default class Store {
 
     return (
       entitiesList.findIndex((e) => {
-        return equal(e, entity);
+        return e.equals(entity);
       }) > -1
     );
   }
