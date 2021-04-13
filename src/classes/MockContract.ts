@@ -28,7 +28,10 @@ export default class MockContract {
     const raw = withArgs ? fName.concat(JSON.stringify(withArgs)) : fName;
     const key = sha256(raw).toString();
 
-    assert(fName in this.functions, "Function does not exist in contract.");
+    assert(
+      fName in this.functions,
+      `Function ${fName} does not exist in contract.`,
+    );
 
     const revertsResponse = () => {
       throw Error(

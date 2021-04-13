@@ -5,9 +5,12 @@ import { fantasyEntities, sciFiEntities } from "./mocks/mockEntities";
 
 describe("Store", () => {
   const entities: Map<string, Entity> = new Map();
-  const dragonEntity = new Entity("1", "Dragon", "The dragon is green");
-  const coinEntity = new Entity("34", "Coin", "Old coin made of silver");
-  const rabbitEntity = new Entity("66", "Animal", "White rabbit");
+  const dragonEntity = new Entity("1", "The dragon is green");
+  const coinEntity = new Entity("34", "Old coin made of silver");
+  const rabbitEntity = new Entity("66", {
+    color: "White",
+    speed: 10,
+  });
 
   let store: Store;
 
@@ -23,8 +26,8 @@ describe("Store", () => {
     store.hydrateWithEntities(entities);
 
     const entitiesJson = JSON.stringify(Array.from(entities.entries()));
-    const endStateJson = store.readState();
-    const endStateMap = new Map(JSON.parse(endStateJson));
+    const endStateJson = store.readStateJson();
+    const endStateMap = store.readStateMap();
 
     expect(endStateMap).length(2);
     expect(entitiesJson).equals(endStateJson);
@@ -33,10 +36,10 @@ describe("Store", () => {
   it("Should hydrate the state with a store JSON", () => {
     store.hydrateWithJson(JSON.stringify(fantasyEntities));
 
-    const endStateMap = new Map(JSON.parse(store.readState()));
+    const endStateMap = store.readStateMap();
     expect(endStateMap).length(3);
     expect(JSON.stringify(Array.from(endStateMap.entries()))).equals(
-      JSON.stringify(fantasyEntities),
+      JSON.stringify(fantasyEntities)
     );
   });
 
@@ -61,13 +64,13 @@ describe("Store", () => {
     expect(() => {
       store.hydrateWithJson(JSON.stringify(sciFiEntities));
     }).throws(
-      `State is not empty. Please use state.clear() to clear the state before hydrating.`,
+      `State is not empty. Please use state.clear() to clear the state before hydrating.`
     );
 
     expect(() => {
       store.hydrateWithEntities(entities);
     }).throws(
-      `State is not empty. Please use state.clear() to clear the state before hydrating.`,
+      `State is not empty. Please use state.clear() to clear the state before hydrating.`
     );
   });
 
@@ -81,7 +84,7 @@ describe("Store", () => {
     expect(() => {
       store.assertStateSnapshotEq(JSON.stringify(fantasyEntities));
     }).throws(
-      `Cannot check for equality when the state is empty. You need to first hydrate the state.`,
+      `Cannot check for equality when the state is empty. You need to first hydrate the state.`
     );
   });
 
@@ -118,7 +121,7 @@ describe("Store", () => {
     expect(() => {
       store.assertEntityEq("dragonEntityKey", coinEntity);
     }).throws(
-      `Provided entity is not equal to corresponding entity with given entity key in the state.`,
+      `Provided entity is not equal to corresponding entity with given entity key in the state.`
     );
   });
 
