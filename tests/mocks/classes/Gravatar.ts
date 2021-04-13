@@ -1,10 +1,10 @@
 export default class Gravatar {
-  public id: string | number;
+  public id: string;
   public owner: string = "";
   public displayName: string = "";
   public imageUrl: string = "";
 
-  constructor(id: string | number) {
+  constructor(id: string) {
     this.id = id;
   }
 }
