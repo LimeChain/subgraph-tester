@@ -16,7 +16,7 @@ export default class Store {
       if (!this.entityExists(entity)) {
         this.addEntity(item.id, entity);
       } else {
-        $log.debug("Trying to persist entity that already exists. Skipping.");
+        $log.debug("Entity that already exists in state. Skipping.");
       }
     });
   }
