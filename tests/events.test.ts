@@ -10,12 +10,6 @@ import Transfer from "./mocks/classes/Transfer";
 import yamlString from "./mocks/subgraphYml";
 
 describe("Contract events", () => {
-  const store = new Store();
-
-  beforeEach(() => {
-    store.clear();
-  });
-
   const newGravatar: NewGravatar = new NewGravatar({
     color: "purple",
     displayName: "Harold",
@@ -72,6 +66,8 @@ describe("Contract events", () => {
   });
 
   it("Can call function handler and populate the state", () => {
+    const store = new Store();
+
     handleNewGravatar(newGravatar);
     expect(store.readStateMap()).length(1);
 
@@ -82,6 +78,8 @@ describe("Contract events", () => {
   });
 
   it("Can run an events test fixture through a mapping function", () => {
+    const store = new Store();
+
     const gravatarEventsFixture = [newGravatar, anotherNewGravatar];
     const transferEventsFixture = [newTransfer, anotherNewTransfer];
 

@@ -2,6 +2,8 @@ import { assert } from "chai";
 import sha256 from "crypto-js/sha256";
 import sinon from "sinon";
 import Web3 from "web3";
+import "../extensions/object";
+
 import {
   IAbiItem,
   IMockFunctionArgs,
@@ -9,7 +11,7 @@ import {
 } from "../models/Contract";
 
 export default class MockContract {
-  private mockReturns: Map<string, () => {}> = new Map();
+  private mockBodies: Map<string, () => {}> = new Map();
   private functions: IAbiItem[];
 
   constructor(abi: IAbiItem[]) {
@@ -20,7 +22,7 @@ export default class MockContract {
 
   public mockFunction = ({
     fName,
-    mockReturn,
+    mockBody,
     withArgs,
     reverts,
     revertsMsg,
@@ -43,23 +45,30 @@ export default class MockContract {
 
     const mockRes = reverts
       ? revertsResponse
-      : sinon.mock().returns(mockReturn)();
-    this.mockReturns.set(key, mockRes);
+      : sinon.mock().returns(mockBody)();
+    this.mockBodies.set(key, mockRes);
   }
 
-  public runFunction = ({ fName, withArgs }: IRunFunctionArgs) => {
+  public runFunction = ({
+    fName,
+    withArgs,
+    eventsToEmit,
+  }: IRunFunctionArgs) => {
     const raw = withArgs ? fName.concat(JSON.stringify(withArgs)) : fName;
     const key = sha256(raw).toString();
 
     assert(
-      this.mockReturns.get(key) !== undefined,
+      this.mockBodies.get(key) !== undefined,
       "This function has not been mocked yet.",
     );
 
-    return this.mockReturns.get(key)!();
+    eventsToEmit.forEach((e) => {
+      e.emit();
+    });
+    return this.mockBodies.get(key)!();
   }
 
   public clearMocks = () => {
-    this.mockReturns.clear();
+    this.mockBodies.clear();
   }
 }

@@ -11,7 +11,11 @@ export default class Store {
   constructor() {
     sparkles.on("persistEntity", (item: any) => {
       const entity = new Entity(item.id, item);
-      this.addEntity(item.id, entity);
+
+      // TODO: test me
+      if (!this.entityExists(entity)) {
+        this.addEntity(item.id, entity);
+      }
     });
   }
 

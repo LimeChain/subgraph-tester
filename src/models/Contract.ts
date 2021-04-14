@@ -1,3 +1,5 @@
+import Event from "../classes/Event";
+
 export interface IAbiItem {
   anonymous?: boolean;
   constant?: boolean;
@@ -30,7 +32,7 @@ export interface IAbiOutput {
 
 export interface IMockFunctionArgs {
   fName: string;
-  mockReturn: () => {};
+  mockBody: () => {};
   withArgs?: any[];
   reverts?: boolean;
   revertsMsg?: string;
@@ -38,5 +40,6 @@ export interface IMockFunctionArgs {
 
 export interface IRunFunctionArgs {
   fName: string;
+  eventsToEmit: Event[];
   withArgs?: any[];
 }

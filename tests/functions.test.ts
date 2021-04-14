@@ -1,26 +1,46 @@
 import { expect } from "chai";
 import MockContract from "../src/classes/MockContract";
+import Store from "../src/classes/Store";
+import "../src/extensions/object";
 import { IMockFunctionArgs, IRunFunctionArgs } from "../src/models/Contract";
+import NewGravatar from "./mocks/classes/NewGravatar";
 import { ERC20TransferABI } from "./mocks/sampleContractABI";
 
 describe("Contract functions", () => {
+  const store = new Store();
   const mockContract = new MockContract(ERC20TransferABI);
 
-  const testReturnValue = () => {
+  const mockBody = () => {
     return "myReturnValue";
   };
 
   const baseMockFunctionArgs: IMockFunctionArgs = {
     fName: "transfer",
-    mockReturn: testReturnValue,
+    mockBody,
   };
 
   const baseRunFunctionArgs: IRunFunctionArgs = {
+    eventsToEmit: [],
     fName: "transfer",
   };
 
+  const newGravatar: NewGravatar = new NewGravatar({
+    color: "purple",
+    displayName: "Harold",
+    id: "444",
+    owner: "0x1234567",
+  });
+
+  const anotherNewGravatar: NewGravatar = new NewGravatar({
+    color: "yellow",
+    displayName: "Gerald",
+    id: "555",
+    owner: "0x1234567",
+  });
+
   afterEach(() => {
     mockContract.clearMocks();
+    store.clear();
   });
 
   it("Fails when trying to mock function that doesn't exist in the contract", () => {
@@ -47,7 +67,7 @@ describe("Contract functions", () => {
     };
     mockContract.mockFunction({
       ...baseMockFunctionArgs,
-      mockReturn: updatedReturnValue,
+      mockBody: updatedReturnValue,
     });
 
     expect(mockContract.runFunction(baseRunFunctionArgs)).equals(
@@ -70,7 +90,7 @@ describe("Contract functions", () => {
     };
     mockContract.mockFunction({
       ...baseMockFunctionArgs,
-      mockReturn: widerScopeFunction,
+      mockBody: widerScopeFunction,
     });
 
     mockContract.runFunction(baseRunFunctionArgs);
@@ -78,13 +98,13 @@ describe("Contract functions", () => {
   });
 
   it("Can pass optional arguments to mocked function", () => {
-    const mockReturnWithArgs = () => {
+    const mockBodyWithArgs = () => {
       return "pong";
     };
 
     mockContract.mockFunction({
       ...baseMockFunctionArgs,
-      mockReturn: mockReturnWithArgs,
+      mockBody: mockBodyWithArgs,
       withArgs: ["ping"],
     });
 
@@ -94,13 +114,13 @@ describe("Contract functions", () => {
   });
 
   it("Can pass multiple optional arguments to mocked function", () => {
-    const mockReturnWithArgs = () => {
+    const mockBodyWithArgs = () => {
       return "ping pong ping";
     };
 
     mockContract.mockFunction({
       ...baseMockFunctionArgs,
-      mockReturn: mockReturnWithArgs,
+      mockBody: mockBodyWithArgs,
       withArgs: ["ping", 1, 5],
     });
 
@@ -132,5 +152,12 @@ describe("Contract functions", () => {
     }).throws(
       `Function "${baseRunFunctionArgs.fName}" reverted. No reason specified.`,
     );
+  });
+
+  it("Can emit events when invoking contract function", () => {
+    mockContract.mockFunction(baseMockFunctionArgs);
+    const eventFixtures = [newGravatar, anotherNewGravatar];
+
+    mockContract.runFunction({ ...baseRunFunctionArgs, eventsToEmit: eventFixtures });
   });
 });
