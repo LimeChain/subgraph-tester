@@ -1,3 +1,4 @@
+import { $log } from "@tsed/logger";
 import { assert } from "chai";
 import sha256 from "crypto-js/sha256";
 import Entity from "./Entity";
@@ -12,9 +13,10 @@ export default class Store {
     sparkles.on("persistEntity", (item: any) => {
       const entity = new Entity(item.id, item);
 
-      // TODO: test me
       if (!this.entityExists(entity)) {
         this.addEntity(item.id, entity);
+      } else {
+        $log.debug("Trying to persist entity that already exists. Skipping.");
       }
     });
   }
