@@ -47,23 +47,6 @@ describe("Resolver", () => {
     fName: "transfer",
   };
 
-  it("Can load handler functions into the Resolver", () => {
-    resolver.addEventHandler("NewGravatar", handleNewGravatar);
-    expect(resolver.getEventHandler().size).equals(1);
-  });
-
-  it("Can emit events when invoking contract function", () => {
-    resolver.addEventHandler("NewGravatar", handleNewGravatar);
-
-    mockContract.mockFunction(baseMockFunctionArgs);
-    const eventFixtures = [newGravatar, anotherNewGravatar];
-
-    mockContract.runFunction({
-      ...baseRunFunctionArgs,
-      eventsToEmit: eventFixtures,
-    });
-  });
-
   // TODO: extract these handlers into mocks file
   const handleNewGravatar = (event: NewGravatar): void => {
     const gravatar = new Gravatar(event.params.id.toHex());
@@ -73,7 +56,24 @@ describe("Resolver", () => {
     gravatar.save();
   };
 
-  it("Can catch and handle events emitted by mocked contract calls", () => {
+  it("Can load handler functions into the Resolver", () => {
+    resolver.addEventHandler("NewGravatar", handleNewGravatar);
+    expect(resolver.getEventHandler().size).equals(1);
+  });
+
+  it("Can emit, catch and handle events when invoking contract function", () => {
+    resolver.addEventHandler("NewGravatar", handleNewGravatar);
+
     mockContract.mockFunction(baseMockFunctionArgs);
+    const eventFixtures = [newGravatar, anotherNewGravatar];
+
+    mockContract.runFunction({
+      ...baseRunFunctionArgs,
+      eventsToEmit: eventFixtures,
+    });
+
+    expect(store.readStateJson()).equals(
+      `[["393939",{"id":"393939","params":{"owner":"0x1234567","displayName":"Gerard","id":"393939"}}],["3131353535",{"id":"3131353535","params":{"owner":"0x1234567","displayName":"Don Draper","id":"3131353535"}}]]`
+    );
   });
 });
