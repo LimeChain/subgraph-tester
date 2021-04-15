@@ -73,7 +73,10 @@ export default class Store {
     this.state.delete(entityKey);
   }
 
-  public assertStateSnapshotEq = (snapshot: string) => {
+  public assertStateSnapshotEq = (snapshotRaw: string) => {
+    const snapshotMap = new Map(JSON.parse(snapshotRaw));
+    const snapshot = stringify(Array.from(snapshotMap.entries()));
+
     assert(
       this.state.size > 0,
       "Cannot check for equality when the state is empty. You need to first hydrate the state.",
