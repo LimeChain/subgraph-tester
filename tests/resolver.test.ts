@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import Event from "../src/classes/Event";
 import MockContract from "../src/classes/MockContract";
 import Resolver from "../src/classes/Resolver";
 import Store from "../src/classes/Store";
@@ -24,7 +25,7 @@ describe("Resolver", () => {
 
   it("Can load handler functions into the Resolver", () => {
     resolver.addEventHandler("NewGravatar", handleNewGravatar);
-    expect(resolver.getEventHandler().size).equals(1);
+    expect(resolver.getEventHandlers().size).equals(1);
   });
 
   it("Can emit, catch and handle events when invoking contract function", () => {
@@ -41,5 +42,21 @@ describe("Resolver", () => {
     expect(store.readStateJson()).equals(
       `[["393939",{"id":"393939","params":{"owner":"0x1234567","displayName":"Gerard","id":"393939"}}],["3131353535",{"id":"3131353535","params":{"owner":"0x1234567","displayName":"Don Draper","id":"3131353535"}}]]`,
     );
+  });
+
+  it("Fails when attempting to add a handler for an event that is not declared in the subgraph yaml", () => {
+    expect(() => {
+      resolver.addEventHandler("IDoNotExistEvent", handleNewGravatar);
+    }).throws(
+      `Cannot add handler for IDoNotExistEvent. Event not found in subgraph yaml.`,
+    );
+
+    const eventHandlers: Map<string, (event: Event) => void> = new Map();
+    eventHandlers.set("NewGravatar", handleNewGravatar);
+    eventHandlers.set("IDoNotExistEvent", handleNewGravatar);
+
+    expect(() => {
+      resolver.setEventHandlers(eventHandlers);
+    }).throws("The following events do not exist in the subgraph yaml: IDoNotExistEvent");
   });
 });

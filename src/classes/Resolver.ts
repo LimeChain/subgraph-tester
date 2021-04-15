@@ -1,3 +1,4 @@
+import { assert } from "chai";
 import subgraphYaml from "../../tests/mocks/subgraphYml";
 import Event from "../classes/Event";
 import SubgraphData from "./SubgraphData";
@@ -11,24 +12,41 @@ export default class Resolver {
 
   constructor() {
     sparkles.on("emitEvent", (event: Event) => {
-      // TODO: assert exists
+      assert(
+        this.subgraphData.getEventNames().includes(event.name),
+        `Event ${event.name} not found in subgraph yaml.`,
+      );
       this.eventHandlers.get(event.name)!(event);
     });
   }
 
   public setEventHandlers = (handlers: Map<string, (event: Event) => void>) => {
-    // TODO: asser that all of them exist in the subgraph
+    const notFoundInSubgraphData: string[] = [];
+    Array.from(handlers.keys()).forEach((name) => {
+      if (!this.subgraphData.getEventNames().includes(name)) {
+        notFoundInSubgraphData.push(name);
+      }
+    });
+    assert(
+      notFoundInSubgraphData.length === 0,
+      `The following events do not exist in the subgraph yaml: ${notFoundInSubgraphData.join(
+        "\n",
+      )}`,
+    );
     this.eventHandlers = handlers;
   }
 
   public addEventHandler = (name: string, handler: (event: Event) => void) => {
-    // TODO: check if this exist in the subgraph
+    assert(
+      this.subgraphData.getEventNames().includes(name),
+      `Cannot add handler for ${name}. Event not found in subgraph yaml.`,
+    );
     if (this.eventHandlers.get(name) === undefined) {
       this.eventHandlers.set(name, handler);
     }
   }
 
-  public getEventHandler = () => {
+  public getEventHandlers = () => {
     return new Map(this.eventHandlers);
   }
 

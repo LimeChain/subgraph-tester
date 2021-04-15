@@ -1,10 +1,5 @@
 import yaml from "yaml";
 
-interface IEventHandler {
-  event: string;
-  handler: string;
-}
-
 export default class SubgraphData {
   private data: any;
   private events: string[];
@@ -25,8 +20,8 @@ export default class SubgraphData {
       return JSON.stringify(this.data);
   }
 
-  public getEventNames = (eventHandles: IEventHandler[]) => {
-    return Array.from(eventHandles).map((eh: IEventHandler) => {
+  public getEventNames = () => {
+    return Array.from(this.data.dataSources[0].mapping.eventHandlers).map((eh: any) => {
       return eh.event.substring(0, eh.event.indexOf("("));
     });
   }
