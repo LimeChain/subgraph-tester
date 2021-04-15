@@ -18,4 +18,5 @@ export default `dataSources:
           handler: handleTransfer
         - event: Approval(address,address,uint256)
           handler: handleApproval
-        - event: NewGravatar(string,address,string,string)`;
+        - event: NewGravatar(string,address,string,string)
+          handler: handleNewGravatar`;

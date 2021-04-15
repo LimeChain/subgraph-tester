@@ -10,6 +10,12 @@ import Transfer from "./mocks/classes/Transfer";
 import yamlString from "./mocks/subgraphYml";
 
 describe("Contract events", () => {
+  const store = new Store();
+
+  afterEach(() => {
+    store.clear();
+  });
+
   const newGravatar: NewGravatar = new NewGravatar({
     color: "purple",
     displayName: "Harold",
@@ -27,7 +33,7 @@ describe("Contract events", () => {
   const newTransfer: NewTransfer = new NewTransfer({
     amount: 5,
     from: "123",
-    id: "999",
+    id: "5000",
     to: "456",
   });
 
@@ -38,6 +44,7 @@ describe("Contract events", () => {
     to: "789",
   });
 
+  // TODO: extract these handlers into mocks file
   const handleNewGravatar = (event: NewGravatar): void => {
     const gravatar = new Gravatar(event.params.id.toHex());
     gravatar.owner = event.params.owner;
@@ -61,13 +68,11 @@ describe("Contract events", () => {
   it("Can parse .yml file and get events correctly.", () => {
     expect(eventsArray).length(3);
     expect(JSON.stringify(eventsArray)).equals(
-      `[[0,"Transfer"],[1,"Approval"],[2,"NewGravatar"]]`,
+      `[[0,{"event":"Transfer(address,address,uint256)","handler":"handleTransfer"}],[1,{"event":"Approval(address,address,uint256)","handler":"handleApproval"}],[2,{"event":"NewGravatar(string,address,string,string)","handler":"handleNewGravatar"}]]`,
     );
   });
 
   it("Can call function handler and populate the state", () => {
-    const store = new Store();
-
     handleNewGravatar(newGravatar);
     expect(store.readStateMap()).length(1);
 
@@ -78,8 +83,6 @@ describe("Contract events", () => {
   });
 
   it("Can run an events test fixture through a mapping function", () => {
-    const store = new Store();
-
     const gravatarEventsFixture = [newGravatar, anotherNewGravatar];
     const transferEventsFixture = [newTransfer, anotherNewTransfer];
 
@@ -92,6 +95,8 @@ describe("Contract events", () => {
     });
 
     expect(store.readStateMap().size).equals(4);
-    expect(store.readStateJson()).equals(`[["343434",{"id":"343434","params":{"owner":"0x1234567","displayName":"Harold","id":"343434"}}],["353535",{"id":"353535","params":{"owner":"0x1234567","displayName":"Gerald","id":"353535"}}],["393939",{"id":"393939","params":{"id":"393939","to":"456","from":"123","amount":5}}],["333333",{"id":"333333","params":{"id":"333333","to":"789","from":"456","amount":5}}]]`);
+    expect(store.readStateJson()).equals(
+      `[["343434",{"id":"343434","params":{"owner":"0x1234567","displayName":"Harold","id":"343434"}}],["353535",{"id":"353535","params":{"owner":"0x1234567","displayName":"Gerald","id":"353535"}}],["35303030",{"id":"35303030","params":{"id":"35303030","to":"456","from":"123","amount":5}}],["333333",{"id":"333333","params":{"id":"333333","to":"789","from":"456","amount":5}}]]`,
+    );
   });
 });

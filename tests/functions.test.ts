@@ -4,12 +4,13 @@ import Store from "../src/classes/Store";
 import "../src/extensions/object";
 import { IMockFunctionArgs, IRunFunctionArgs } from "../src/models/Contract";
 import NewGravatar from "./mocks/classes/NewGravatar";
-import { ERC20TransferABI } from "./mocks/sampleContractABI";
+import { MockAbi } from "./mocks/sampleContractABI";
 
 describe("Contract functions", () => {
   const store = new Store();
-  const mockContract = new MockContract(ERC20TransferABI);
+  const mockContract = new MockContract(MockAbi);
 
+  // TODO: export these in a global mocks/fixtures file
   const mockBody = () => {
     return "myReturnValue";
   };
@@ -23,20 +24,6 @@ describe("Contract functions", () => {
     eventsToEmit: [],
     fName: "transfer",
   };
-
-  const newGravatar: NewGravatar = new NewGravatar({
-    color: "purple",
-    displayName: "Harold",
-    id: "444",
-    owner: "0x1234567",
-  });
-
-  const anotherNewGravatar: NewGravatar = new NewGravatar({
-    color: "yellow",
-    displayName: "Gerald",
-    id: "555",
-    owner: "0x1234567",
-  });
 
   afterEach(() => {
     mockContract.clearMocks();
@@ -152,12 +139,5 @@ describe("Contract functions", () => {
     }).throws(
       `Function "${baseRunFunctionArgs.fName}" reverted. No reason specified.`,
     );
-  });
-
-  it("Can emit events when invoking contract function", () => {
-    mockContract.mockFunction(baseMockFunctionArgs);
-    const eventFixtures = [newGravatar, anotherNewGravatar];
-
-    mockContract.runFunction({ ...baseRunFunctionArgs, eventsToEmit: eventFixtures });
   });
 });

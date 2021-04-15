@@ -14,9 +14,7 @@ export default class SubgraphData {
 
     this.data = fullData;
     // TODO: Should we always get the first?
-    this.events = this.getEventNames(
-      fullData.dataSources[0].mapping.eventHandlers,
-    );
+    this.events = fullData.dataSources[0].mapping.eventHandlers;
   }
 
   public getEvents = () => {
@@ -27,7 +25,7 @@ export default class SubgraphData {
       return JSON.stringify(this.data);
   }
 
-  private getEventNames = (eventHandles: IEventHandler[]) => {
+  public getEventNames = (eventHandles: IEventHandler[]) => {
     return Array.from(eventHandles).map((eh: IEventHandler) => {
       return eh.event.substring(0, eh.event.indexOf("("));
     });

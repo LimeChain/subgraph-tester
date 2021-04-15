@@ -52,7 +52,6 @@ export default class Store {
       this.state.get(entityKey) === undefined,
       `Entity with key ${entityKey} already exists in the state. If you want to update it, use state.updateEntity().`,
     );
-
     this.state.set(entityKey, entity);
   }
 
