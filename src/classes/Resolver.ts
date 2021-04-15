@@ -17,12 +17,12 @@ export default class Resolver {
   }
 
   public setEventHandlers = (handlers: Map<string, (event: Event) => void>) => {
-    // TODO: asser that this exist in the subgraph
+    // TODO: asser that all of them exist in the subgraph
     this.eventHandlers = handlers;
   }
 
   public addEventHandler = (name: string, handler: (event: Event) => void) => {
-    // TODO: check if that this exist in the subgraph
+    // TODO: check if this exist in the subgraph
     if (this.eventHandlers.get(name) === undefined) {
       this.eventHandlers.set(name, handler);
     }

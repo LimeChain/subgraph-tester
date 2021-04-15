@@ -2,28 +2,12 @@ import { expect } from "chai";
 import MockContract from "../src/classes/MockContract";
 import Store from "../src/classes/Store";
 import "../src/extensions/object";
-import { IMockFunctionArgs, IRunFunctionArgs } from "../src/models/Contract";
-import NewGravatar from "./mocks/classes/NewGravatar";
+import { baseMockFunctionArgs, baseRunFunctionArgs } from "./mocks/fixtures";
 import { MockAbi } from "./mocks/sampleContractABI";
 
 describe("Contract functions", () => {
   const store = new Store();
   const mockContract = new MockContract(MockAbi);
-
-  // TODO: export these in a global mocks/fixtures file
-  const mockBody = () => {
-    return "myReturnValue";
-  };
-
-  const baseMockFunctionArgs: IMockFunctionArgs = {
-    fName: "transfer",
-    mockBody,
-  };
-
-  const baseRunFunctionArgs: IRunFunctionArgs = {
-    eventsToEmit: [],
-    fName: "transfer",
-  };
 
   afterEach(() => {
     mockContract.clearMocks();
