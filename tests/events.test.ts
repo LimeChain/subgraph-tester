@@ -13,11 +13,13 @@ import {
   newTransfer,
 } from "./mocks/fixtures";
 import yamlString from "./mocks/subgraphYml";
+// tslint:disable-next-line: no-var-requires
+const stringify = require("json-stable-stringify");
 
 describe("Contract events", () => {
   const store = new Store();
 
-  afterEach(() => {
+  beforeEach(() => {
     store.clear();
   });
 
@@ -35,7 +37,7 @@ describe("Contract events", () => {
 
   it("Can parse .yml file and get events correctly.", () => {
     expect(eventsArray).length(3);
-    expect(JSON.stringify(eventsArray)).equals(
+    expect(stringify(eventsArray)).equals(
       `[[0,{"event":"Transfer(address,address,uint256)","handler":"handleTransfer"}],[1,{"event":"Approval(address,address,uint256)","handler":"handleApproval"}],[2,{"event":"NewGravatar(string,address,string,string)","handler":"handleNewGravatar"}]]`,
     );
   });
@@ -46,7 +48,7 @@ describe("Contract events", () => {
 
     const storeMapJSON = store.readStateJson();
     expect(storeMapJSON).equals(
-      `[["393939",{"id":"393939","params":{"owner":"0x1234567","displayName":"Gerard","id":"393939"}}]]`,
+      `[["393939",{"id":"393939","params":{"displayName":"Gerard","id":"393939","owner":"0x1234567"}}]]`,
     );
   });
 
@@ -64,7 +66,7 @@ describe("Contract events", () => {
 
     expect(store.readStateMap().size).equals(4);
     expect(store.readStateJson()).equals(
-      `[["393939",{"id":"393939","params":{"owner":"0x1234567","displayName":"Gerard","id":"393939"}}],["3131353535",{"id":"3131353535","params":{"owner":"0x1234567","displayName":"Don Draper","id":"3131353535"}}],["35303030",{"id":"35303030","params":{"id":"35303030","to":"456","from":"123","amount":5}}],["333333",{"id":"333333","params":{"id":"333333","to":"789","from":"456","amount":5}}]]`,
+      `[["393939",{"id":"393939","params":{"displayName":"Gerard","id":"393939","owner":"0x1234567"}}],["3131353535",{"id":"3131353535","params":{"displayName":"Don Draper","id":"3131353535","owner":"0x1234567"}}],["35303030",{"id":"35303030","params":{"amount":5,"from":"123","id":"35303030","to":"456"}}],["333333",{"id":"333333","params":{"amount":5,"from":"456","id":"333333","to":"789"}}]]`,
     );
   });
 });

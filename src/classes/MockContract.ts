@@ -3,6 +3,8 @@ import sha256 from "crypto-js/sha256";
 import sinon from "sinon";
 import Web3 from "web3";
 import "../extensions/object";
+// tslint:disable-next-line: no-var-requires
+const stringify = require("json-stable-stringify");
 
 import {
   IAbiItem,
@@ -27,7 +29,7 @@ export default class MockContract {
     reverts,
     revertsMsg,
   }: IMockFunctionArgs): void => {
-    const raw = withArgs ? fName.concat(JSON.stringify(withArgs)) : fName;
+    const raw = withArgs ? fName.concat(stringify(withArgs)) : fName;
     const key = sha256(raw).toString();
 
     assert(
@@ -54,7 +56,7 @@ export default class MockContract {
     withArgs,
     eventsToEmit,
   }: IRunFunctionArgs) => {
-    const raw = withArgs ? fName.concat(JSON.stringify(withArgs)) : fName;
+    const raw = withArgs ? fName.concat(stringify(withArgs)) : fName;
     const key = sha256(raw).toString();
 
     assert(

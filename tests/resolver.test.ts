@@ -40,7 +40,7 @@ describe("Resolver", () => {
     });
 
     expect(store.readStateJson()).equals(
-      `[["393939",{"id":"393939","params":{"owner":"0x1234567","displayName":"Gerard","id":"393939"}}],["3131353535",{"id":"3131353535","params":{"owner":"0x1234567","displayName":"Don Draper","id":"3131353535"}}]]`,
+      `[["393939",{"id":"393939","params":{"displayName":"Gerard","id":"393939","owner":"0x1234567"}}],["3131353535",{"id":"3131353535","params":{"displayName":"Don Draper","id":"3131353535","owner":"0x1234567"}}]]`,
     );
   });
 

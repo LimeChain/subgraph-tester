@@ -1,8 +1,8 @@
-import { $log } from "@tsed/logger";
 import { assert } from "chai";
 import sha256 from "crypto-js/sha256";
 import Entity from "./Entity";
-
+// tslint:disable-next-line: no-var-requires
+const stringify = require("json-stable-stringify");
 // tslint:disable-next-line: no-var-requires
 const sparkles = require("sparkles")();
 
@@ -15,8 +15,6 @@ export default class Store {
 
       if (!this.entityExists(entity)) {
         this.addEntity(item.id, entity);
-      } else {
-        $log.debug("Entity that already exists in state. Skipping.");
       }
     });
   }
@@ -39,7 +37,7 @@ export default class Store {
   }
 
   public readStateJson = () => {
-    return JSON.stringify(Array.from(this.state.entries()));
+    return stringify(Array.from(this.state.entries()));
   }
 
   public readStateMap = (): Map<string, Entity> => {

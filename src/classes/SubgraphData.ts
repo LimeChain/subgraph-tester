@@ -1,4 +1,6 @@
 import yaml from "yaml";
+// tslint:disable-next-line: no-var-requires
+const stringify = require("json-stable-stringify");
 
 export default class SubgraphData {
   private data: any;
@@ -17,7 +19,7 @@ export default class SubgraphData {
   }
 
   public printAllData = () => {
-      return JSON.stringify(this.data);
+      return stringify(this.data);
   }
 
   public getEventNames = () => {
