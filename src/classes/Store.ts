@@ -1,5 +1,5 @@
 import { assert } from "chai";
-import equal from "fast-deep-equal/es6";
+import sha256 from "crypto-js/sha256";
 import Entity from "./Entity";
 
 // tslint:disable-next-line: no-var-requires
@@ -42,6 +42,21 @@ export default class Store {
 
   public addEntity = (entityKey: string, entity: Entity): void => {
     assert(entityKey.trim() !== "", "Entity key cannot be an empty string.");
+    assert(
+      this.state.get(entityKey) === undefined,
+      `Entity with key ${entityKey} already exists in the state. If you want to update it, use state.updateEntity().`,
+    );
+
+    this.state.set(entityKey, entity);
+  }
+
+  public updateEntity = (entityKey: string, entity: Entity): void => {
+    assert(entityKey.trim() !== "", "Entity key cannot be an empty string.");
+    assert(
+      this.state.get(entityKey) !== undefined,
+      `Entity key ${entityKey} not found in state. Try adding the entity first with store.addEntity().`,
+    );
+
     this.state.set(entityKey, entity);
   }
 
@@ -61,9 +76,10 @@ export default class Store {
       "Cannot check for equality when the state is empty. You need to first hydrate the state.",
     );
 
-    const snapshotMap: Map<string, Entity> = new Map(JSON.parse(snapshot));
+    const snapshotHash = sha256(snapshot).toString();
+    const stateHash = sha256(this.readStateJson()).toString();
     assert(
-      equal(snapshotMap, this.state),
+      snapshotHash === stateHash,
       "Provided snapshot map is not equal to the store.",
     );
   }
@@ -76,7 +92,7 @@ export default class Store {
     );
 
     assert(
-      equal(this.state.get(entityKey), entity),
+      entity.equals(this.state.get(entityKey)!),
       "Provided entity is not equal to corresponding entity with given entity key in the state.",
     );
   }
@@ -87,7 +103,7 @@ export default class Store {
 
     return (
       entitiesList.findIndex((e) => {
-        return equal(e, entity);
+        return e.equals(entity);
       }) > -1
     );
   }
