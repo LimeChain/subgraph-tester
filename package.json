@@ -19,7 +19,7 @@
     "@types/yaml": "^1.9.7",
     "chai": "^4.3.4",
     "crypto-js": "^4.0.0",
-    "json-stable-stringify": "^1.0.1",
+    "fast-json-stable-stringify": "^2.1.0",
     "mocha": "^8.3.2",
     "sinon": "^10.0.0",
     "source-map-support": "^0.5.19",

@@ -4,7 +4,7 @@ import sinon from "sinon";
 import Web3 from "web3";
 import "../extensions/object";
 // tslint:disable-next-line: no-var-requires
-const stringify = require("json-stable-stringify");
+const stringify = require("fast-json-stable-stringify");
 
 import {
   IAbiItem,

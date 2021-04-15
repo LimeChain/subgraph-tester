@@ -3,7 +3,7 @@ import Entity from "../src/classes/Entity";
 import Store from "../src/classes/Store";
 import { fantasyEntities, sciFiEntities } from "./mocks/mockEntities";
 // tslint:disable-next-line: no-var-requires
-const stringify = require("json-stable-stringify");
+const stringify = require("fast-json-stable-stringify");
 
 describe("Store", () => {
   const entities: Map<string, Entity> = new Map();

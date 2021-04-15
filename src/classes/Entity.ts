@@ -1,6 +1,6 @@
 import sha256 from "crypto-js/sha256";
 // tslint:disable-next-line: no-var-requires
-const stringify = require("json-stable-stringify");
+const stringify = require("fast-json-stable-stringify");
 
 export default class Entity {
   public id: string;

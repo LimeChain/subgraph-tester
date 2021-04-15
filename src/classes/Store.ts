@@ -2,7 +2,7 @@ import { assert } from "chai";
 import sha256 from "crypto-js/sha256";
 import Entity from "./Entity";
 // tslint:disable-next-line: no-var-requires
-const stringify = require("json-stable-stringify");
+const stringify = require("fast-json-stable-stringify");
 // tslint:disable-next-line: no-var-requires
 const sparkles = require("sparkles")();
 

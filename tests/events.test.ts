@@ -14,7 +14,7 @@ import {
 } from "./mocks/fixtures";
 import yamlString from "./mocks/subgraphYml";
 // tslint:disable-next-line: no-var-requires
-const stringify = require("json-stable-stringify");
+const stringify = require("fast-json-stable-stringify");
 
 describe("Contract events", () => {
   const store = new Store();
