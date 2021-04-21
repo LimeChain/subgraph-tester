@@ -1,7 +1,8 @@
 import { assert } from "chai";
 import sha256 from "crypto-js/sha256";
 import Entity from "./Entity";
-
+// tslint:disable-next-line: no-var-requires
+const stringify = require("fast-json-stable-stringify");
 // tslint:disable-next-line: no-var-requires
 const sparkles = require("sparkles")();
 
@@ -11,7 +12,10 @@ export default class Store {
   constructor() {
     sparkles.on("persistEntity", (item: any) => {
       const entity = new Entity(item.id, item);
-      this.addEntity(item.id, entity);
+
+      if (!this.entityExists(entity)) {
+        this.addEntity(item.id, entity);
+      }
     });
   }
 
@@ -33,7 +37,7 @@ export default class Store {
   }
 
   public readStateJson = () => {
-    return JSON.stringify(Array.from(this.state.entries()));
+    return stringify(Array.from(this.state.entries()));
   }
 
   public readStateMap = (): Map<string, Entity> => {
@@ -46,7 +50,6 @@ export default class Store {
       this.state.get(entityKey) === undefined,
       `Entity with key ${entityKey} already exists in the state. If you want to update it, use state.updateEntity().`,
     );
-
     this.state.set(entityKey, entity);
   }
 
@@ -70,7 +73,10 @@ export default class Store {
     this.state.delete(entityKey);
   }
 
-  public assertStateSnapshotEq = (snapshot: string) => {
+  public assertStateSnapshotEq = (snapshotRaw: string) => {
+    const snapshotMap = new Map(JSON.parse(snapshotRaw));
+    const snapshot = stringify(Array.from(snapshotMap.entries()));
+
     assert(
       this.state.size > 0,
       "Cannot check for equality when the state is empty. You need to first hydrate the state.",

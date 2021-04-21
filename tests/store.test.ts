@@ -2,6 +2,8 @@ import { expect } from "chai";
 import Entity from "../src/classes/Entity";
 import Store from "../src/classes/Store";
 import { fantasyEntities, sciFiEntities } from "./mocks/mockEntities";
+// tslint:disable-next-line: no-var-requires
+const stringify = require("fast-json-stable-stringify");
 
 describe("Store", () => {
   const entities: Map<string, Entity> = new Map();
@@ -24,7 +26,7 @@ describe("Store", () => {
   it("Should hydrate the state with a list of entities", () => {
     store.hydrateWithEntities(entities);
 
-    const entitiesJson = JSON.stringify(Array.from(entities.entries()));
+    const entitiesJson = stringify(Array.from(entities.entries()));
     const endStateJson = store.readStateJson();
     const endStateMap = store.readStateMap();
 
@@ -33,35 +35,35 @@ describe("Store", () => {
   });
 
   it("Should hydrate the state with a store JSON", () => {
-    store.hydrateWithJson(JSON.stringify(fantasyEntities));
+    store.hydrateWithJson(stringify(fantasyEntities));
 
     const endStateMap = store.readStateMap();
     expect(endStateMap).length(3);
-    expect(JSON.stringify(Array.from(endStateMap.entries()))).equals(
-      JSON.stringify(fantasyEntities),
+    expect(stringify(Array.from(endStateMap.entries()))).equals(
+      stringify(fantasyEntities),
     );
   });
 
   it("Should deeply compare the state to a given JSON snapshot and return true when they are equal", () => {
-    store.hydrateWithJson(JSON.stringify(fantasyEntities));
+    store.hydrateWithJson(stringify(fantasyEntities));
     expect(() => {
-      store.assertStateSnapshotEq(JSON.stringify(fantasyEntities));
+      store.assertStateSnapshotEq(stringify(fantasyEntities));
     }).not.throws();
   });
 
   it("Should deeply compare the state to a given JSON snapshot and return false when they are not equal", () => {
-    store.hydrateWithJson(JSON.stringify(fantasyEntities));
+    store.hydrateWithJson(stringify(fantasyEntities));
 
     expect(() => {
-      store.assertStateSnapshotEq(JSON.stringify(sciFiEntities));
+      store.assertStateSnapshotEq(stringify(sciFiEntities));
     }).throws(`Provided snapshot map is not equal to the store.`);
   });
 
   it("Fails when attempting to hydrate a non-empty state", () => {
-    store.hydrateWithJson(JSON.stringify(fantasyEntities));
+    store.hydrateWithJson(stringify(fantasyEntities));
 
     expect(() => {
-      store.hydrateWithJson(JSON.stringify(sciFiEntities));
+      store.hydrateWithJson(stringify(sciFiEntities));
     }).throws(
       `State is not empty. Please use state.clear() to clear the state before hydrating.`,
     );
@@ -81,22 +83,22 @@ describe("Store", () => {
 
   it("Fails when asserting equality of snapshot when state is empty", () => {
     expect(() => {
-      store.assertStateSnapshotEq(JSON.stringify(fantasyEntities));
+      store.assertStateSnapshotEq(stringify(fantasyEntities));
     }).throws(
       `Cannot check for equality when the state is empty. You need to first hydrate the state.`,
     );
   });
 
   it("Fails when asserting equality of snapshot with an empty string as snapshot", () => {
-    store.hydrateWithJson(JSON.stringify(fantasyEntities));
+    store.hydrateWithJson(stringify(fantasyEntities));
 
     expect(() => {
-      store.assertStateSnapshotEq(JSON.stringify("  "));
+      store.assertStateSnapshotEq(stringify("  "));
     }).throws();
   });
 
   it("Fails when providing an empty entity key when asserting equality of Entity objects", () => {
-    store.hydrateWithJson(JSON.stringify(fantasyEntities));
+    store.hydrateWithJson(stringify(fantasyEntities));
 
     expect(() => {
       store.assertEntityEq("  ", dragonEntity);
@@ -104,7 +106,7 @@ describe("Store", () => {
   });
 
   it("Fails entity equality assertion when entity key doesn't exist in state", () => {
-    store.hydrateWithJson(JSON.stringify(fantasyEntities));
+    store.hydrateWithJson(stringify(fantasyEntities));
 
     expect(() => {
       store.assertEntityEq("rabbitEntityKey", dragonEntity);

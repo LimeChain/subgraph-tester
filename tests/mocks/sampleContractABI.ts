@@ -28,7 +28,7 @@ interface IAbiOutput {
   internalType?: string;
 }
 
-export const ERC20TransferABI: IAbiItem[] = [
+export const MockAbi: IAbiItem[] = [
   {
     constant: false,
     inputs: [
