@@ -1,5 +1,5 @@
 // tslint:disable-next-line: class-name
-export default class HostBigInt implements BigInt {
+export default class bigInt implements BigInt {
     public [Symbol.toStringTag]: "BigInt";
     private value: bigint;
 
