@@ -9,7 +9,7 @@ class HostBigInt implements BigInt {
     public toString(radix?: number): string {
         return this.value.toString();
     }
-    public toLocaleString(locales?: string, options?: BigIntToLocaleStringOptions): string {
+    public toLocaleString(locales?: string, options?: any): string {
         return this.value.toString();
     }
     public valueOf(): bigint {
