@@ -4,8 +4,10 @@ import MockContract from "./classes/MockContract";
 import Resolver from "./classes/Resolver";
 import Store from "./classes/Store";
 import SubgraphData from "./classes/SubgraphData";
+import { byteToHex } from "./utils";
 
 module.exports = {
+    byteToHex,
     entity: Entity,
     event: Event,
     mockContract: MockContract,
