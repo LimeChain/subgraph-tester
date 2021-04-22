@@ -1,3 +1,5 @@
+// TODO: Need to research this
+
 class EthereumValue {
   public kind: string | undefined;
   public data: any;

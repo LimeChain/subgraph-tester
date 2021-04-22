@@ -1,5 +1,6 @@
 import BigDecimal from "./classes/BigDecimal";
 import bigInt from "./classes/BigInt";
+import DataSource from "./classes/DataSource";
 import Entity from "./classes/Entity";
 import Ethereum from "./classes/Ethereum";
 import Event from "./classes/Event";
@@ -12,6 +13,7 @@ import TypeConversion from "./classes/TypeConversion";
 module.exports = {
   bigDecimal: BigDecimal,
   bigInt,
+  dataSource: DataSource,
   entity: Entity,
   ethereum: Ethereum,
   event: Event,
