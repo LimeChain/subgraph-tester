@@ -1,3 +1,4 @@
+import BigDecimal from "./classes/BigDecimal";
 import bigInt from "./classes/BigInt";
 import Entity from "./classes/Entity";
 import Event from "./classes/Event";
@@ -8,6 +9,7 @@ import SubgraphData from "./classes/SubgraphData";
 import { byteToHex } from "./utils";
 
 module.exports = {
+    bigDecimal: BigDecimal,
     bigInt,
     byteToHex,
     entity: Entity,
