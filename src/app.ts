@@ -1,6 +1,7 @@
 import BigDecimal from "./classes/BigDecimal";
 import bigInt from "./classes/BigInt";
 import Entity from "./classes/Entity";
+import Ethereum from "./classes/Ethereum";
 import Event from "./classes/Event";
 import MockContract from "./classes/MockContract";
 import Resolver from "./classes/Resolver";
@@ -12,6 +13,7 @@ module.exports = {
   bigDecimal: BigDecimal,
   bigInt,
   entity: Entity,
+  ethereum: Ethereum,
   event: Event,
   mockContract: MockContract,
   relsover: Resolver,
