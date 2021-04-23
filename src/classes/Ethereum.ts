@@ -16,7 +16,7 @@ class SmartContractCall {
     contractName: string,
     contractAddress: Uint8Array,
     functionName: string,
-    functionParams: EthereumValue[]
+    functionParams: EthereumValue[],
   ) {
     this.contractName = contractName;
     this.contractAddress = contractAddress;
