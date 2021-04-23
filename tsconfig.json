@@ -8,7 +8,12 @@
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
     "outDir": "dist",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "types": ["node", "mocha"],
+    "declaration": true
   },
-  "lib": ["es2015"],
-  "exclude": ["./node_modules/", "./dist/", "./tests/"]
+  "lib": ["es6, es2015"],
+  "exclude": ["./node_modules/", "./dist/", "./tests/"],
+  "include": ["src"]
 }
