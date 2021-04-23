@@ -20,7 +20,6 @@ export default class Store {
   }
 
   public get(entity = "", id: string): Entity {
-    assert(id.trim() !== "", "Entity key cannot be an empty string.");
     assert(
       this.state.get(id) !== undefined,
       `Entity with key ${id} does not exist in the state.`,
@@ -29,7 +28,6 @@ export default class Store {
   }
 
   public set = (entity = "", id: string, data: Entity): void => {
-    assert(id.trim() !== "", "Entity key cannot be an empty string.");
     this.state.set(id, data);
   }
 
