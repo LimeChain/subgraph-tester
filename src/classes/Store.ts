@@ -19,6 +19,19 @@ export default class Store {
     });
   }
 
+  // get() and set() are just quick mocks to see if it'll work
+  public get(entity = "", id: string): Entity {
+    assert(
+      this.state.get(id) !== undefined,
+      `Entity with key ${id} does not exist in the state.`,
+    );
+    return this.state.get(id)!;
+  }
+
+  public set = (entity = "", id: string, data: Entity): void => {
+    this.state.set(id, data);
+  }
+
   public hydrateWithEntities = (entities: Map<string, Entity>) => {
     assert(
       this.state.size === 0,
